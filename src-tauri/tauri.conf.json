@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "tauri-template",
+  "productName": "justsayit",
   "version": "../package.json",
-  "identifier": "com.tauri-template.app",
+  "identifier": "com.justsayit.app",
   "build": {
     "beforeDevCommand": "bun run dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "tauri-template",
+        "title": "justsayit",
         "width": 800,
         "height": 600
       }
@@ -35,9 +35,9 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEE5NzQ3NzlBNDY4MDk3NTAKUldSUWw0QkdtbmQwcVVhaTdLWXRaTkFvZklySUc0UUUrTmo1WDAzWVl3MGpxNExyaDhUVjBVVHIK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQ3MjI3MTZFM0IwN0I3M0MKUldROHR3YzdibkVpMTdTVWZSMXljbGJVTmxsb2h4WW5XbmtIdUFLMVdKQkRuMzMwczZReVFvRkUK",
       "endpoints": [
-        "https://github.com/sitek94/tauri-template/releases/latest/download/latest.json"
+        "https://github.com/sitek94/justsayit/releases/latest/download/latest.json"
       ]
     }
   }

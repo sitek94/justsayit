@@ -1,5 +1,5 @@
 ---
-'tauri-template': patch
+'justsayit': patch
 ---
 
-rename app
+rename template
