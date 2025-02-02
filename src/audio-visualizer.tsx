@@ -2,12 +2,14 @@ import {useRef, useState} from 'react'
 
 export function AudioVisualizer() {
 	const canvasRef = useRef<HTMLCanvasElement>(null)
-	const [initialized, setInitialized] = useState(false)
+	const [isRecording, setIsRecording] = useState(false)
 
 	// Store audio context and analyzer in refs since we don't need to trigger re-renders
 	const audioContextRef = useRef<AudioContext | null>(null)
 	const analyserRef = useRef<AnalyserNode | null>(null)
 	const bufferLengthRef = useRef<number>(0)
+
+	const animationFrameIdRef = useRef<number>()
 
 	const getPos = (Hz: number, minHz: number, maxHz: number, max: number): number => {
 		if (Hz > minHz) {
@@ -89,7 +91,9 @@ export function AudioVisualizer() {
 	}
 
 	const startVisualization = async () => {
-		if (initialized) return
+		if (isRecording) return
+
+		// cleanup old
 
 		try {
 			const audioCtx = new window.AudioContext()
@@ -110,14 +114,32 @@ export function AudioVisualizer() {
 
 			function animate() {
 				draw()
-				requestAnimationFrame(animate)
+				animationFrameIdRef.current = requestAnimationFrame(animate)
 			}
-			requestAnimationFrame(animate)
+			animationFrameIdRef.current = requestAnimationFrame(animate)
 
-			setInitialized(true)
+			setIsRecording(true)
 		} catch (error) {
 			console.error('Error initializing audio visualization:', error)
 		}
+	}
+
+	const stopVisualization = () => {
+		if (!isRecording) return
+
+		if (animationFrameIdRef.current) {
+			cancelAnimationFrame(animationFrameIdRef.current)
+		}
+
+		if (audioContextRef.current) {
+			audioContextRef.current.close()
+		}
+
+		canvasRef.current
+			?.getContext('2d')
+			?.clearRect(0, 0, canvasRef.current?.width, canvasRef.current?.height)
+
+		setIsRecording(false)
 	}
 
 	return (
@@ -125,13 +147,20 @@ export function AudioVisualizer() {
 			<div>
 				<canvas ref={canvasRef} width={720} height={400} />
 			</div>
-			<div>
+			<div className="inline-flex gap-2">
 				<button
 					className="rounded-md bg-blue-500 px-4 py-2 text-white"
 					onClick={startVisualization}
-					disabled={initialized}
+					disabled={isRecording}
 				>
 					Start Microphone Visualization
+				</button>
+				<button
+					className="rounded-md bg-red-500 px-4 py-2 text-white"
+					onClick={stopVisualization}
+					disabled={!isRecording}
+				>
+					Stop Visualization
 				</button>
 			</div>
 		</div>
