@@ -1,15 +1,14 @@
 import {version} from '../package.json'
-import {AppUpdateAlert} from './app-update-alert'
+import {useCheckAppUpdate} from './use-check-app-update'
 
 export function App() {
+	useCheckAppUpdate()
+
 	return (
-		<>
-			<AppUpdateAlert />
-			<main className="flex min-h-screen items-center justify-center bg-zinc-100 dark:bg-zinc-900">
-				<div className="p-8 text-center">
-					<h1 className="text-4xl font-bold text-zinc-800 dark:text-white">justsayit v{version}</h1>
-				</div>
-			</main>
-		</>
+		<main className="flex min-h-screen items-center justify-center bg-zinc-100 dark:bg-zinc-900">
+			<div className="p-8 text-center">
+				<h1 className="text-4xl font-bold text-zinc-800 dark:text-white">justsayit v{version}</h1>
+			</div>
+		</main>
 	)
 }
