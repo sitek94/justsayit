@@ -8,7 +8,11 @@ export function AppUpdateAlert() {
 
 	useEffect(() => {
 		;(async () => {
-			const update = await check()
+			const update = await check({
+				headers: {
+					Authorization: `Bearer ${import.meta.env.VITE_RELEASE_CHECKER_TOKEN}`,
+				},
+			})
 			if (update) {
 				setUpdate(update)
 			}
