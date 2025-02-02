@@ -7,6 +7,8 @@ import {version} from '../package.json'
 export function useCheckAppUpdate() {
 	useEffect(() => {
 		;(async () => {
+			if (import.meta.env.DEV) return
+
 			const update = await check()
 
 			if (update) {

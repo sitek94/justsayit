@@ -30,7 +30,8 @@ export function AudioVisualizer() {
 
 		for (let i = 0; i < barCount; i++) {
 			if (!out[i]) {
-				let prevIndex: number, prevValue: number
+				let prevIndex = 0
+				let prevValue = 0
 
 				if ((prevIndex = i - 1) < 0) {
 					prevIndex = 0
@@ -77,7 +78,8 @@ export function AudioVisualizer() {
 		for (let i = 0; i < bars.length; i++) {
 			canvasCtx.rect(
 				i * 10,
-				canvas.height - ((bars[i] + 64) * canvas.height) / 64,
+				// Halve movement range to reduce jumpiness
+				canvas.height - ((bars[i] + 64) * (canvas.height / 2)) / 64,
 				8,
 				canvas.height,
 			)
@@ -96,6 +98,9 @@ export function AudioVisualizer() {
 			const analyser = audioCtx.createAnalyser()
 
 			analyser.fftSize = 4096
+
+			// Makes the bars go up and down more smoothly
+			analyser.smoothingTimeConstant = 0.95
 			bufferLengthRef.current = analyser.frequencyBinCount
 
 			source.connect(analyser)
@@ -103,7 +108,12 @@ export function AudioVisualizer() {
 			audioContextRef.current = audioCtx
 			analyserRef.current = analyser
 
-			setInterval(draw, 16)
+			function animate() {
+				draw()
+				requestAnimationFrame(animate)
+			}
+			requestAnimationFrame(animate)
+
 			setInitialized(true)
 		} catch (error) {
 			console.error('Error initializing audio visualization:', error)
