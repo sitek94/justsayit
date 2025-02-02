@@ -1,15 +1,21 @@
 import {useRef, useState} from 'react'
 
-export function AudioVisualizer() {
-	const canvasRef = useRef<HTMLCanvasElement>(null)
+type AudioVisualizerProps = {
+	onRecordingComplete?: (audioBlob: Blob) => void
+}
+
+export function AudioVisualizer({onRecordingComplete}: AudioVisualizerProps) {
 	const [isRecording, setIsRecording] = useState(false)
 
-	// Store audio context and analyzer in refs since we don't need to trigger re-renders
+	// Refactor all of this later on
+	const canvasRef = useRef<HTMLCanvasElement>(null)
+	const mediaRecorderRef = useRef<MediaRecorder | null>(null)
+	const chunksRef = useRef<Blob[]>([])
 	const audioContextRef = useRef<AudioContext | null>(null)
 	const analyserRef = useRef<AnalyserNode | null>(null)
 	const bufferLengthRef = useRef<number>(0)
 
-	const animationFrameIdRef = useRef<number>()
+	const animationFrameIdRef = useRef<number>(-1)
 
 	const getPos = (Hz: number, minHz: number, maxHz: number, max: number): number => {
 		if (Hz > minHz) {
@@ -93,22 +99,25 @@ export function AudioVisualizer() {
 	const startVisualization = async () => {
 		if (isRecording) return
 
-		// cleanup old
-
 		try {
 			const audioCtx = new window.AudioContext()
 			const stream = await navigator.mediaDevices.getUserMedia({audio: true})
+
+			// Audio capture
+			chunksRef.current = []
+			mediaRecorderRef.current = new MediaRecorder(stream)
+			mediaRecorderRef.current.ondataavailable = e => {
+				if (e.data.size > 0) chunksRef.current.push(e.data)
+			}
+			mediaRecorderRef.current.start()
+
+			// Visualization
 			const source = audioCtx.createMediaStreamSource(stream)
 			const analyser = audioCtx.createAnalyser()
-
 			analyser.fftSize = 4096
-
-			// Makes the bars go up and down more smoothly
 			analyser.smoothingTimeConstant = 0.95
 			bufferLengthRef.current = analyser.frequencyBinCount
-
 			source.connect(analyser)
-
 			audioContextRef.current = audioCtx
 			analyserRef.current = analyser
 
@@ -127,14 +136,23 @@ export function AudioVisualizer() {
 	const stopVisualization = () => {
 		if (!isRecording) return
 
+		// Stop media recording and collect data
+		if (mediaRecorderRef.current) {
+			mediaRecorderRef.current.stop()
+			mediaRecorderRef.current.onstop = () => {
+				const audioBlob = new Blob(chunksRef.current, {type: 'audio/webm'})
+				onRecordingComplete?.(audioBlob)
+				chunksRef.current = []
+			}
+		}
+
+		// Cleanup
 		if (animationFrameIdRef.current) {
 			cancelAnimationFrame(animationFrameIdRef.current)
 		}
-
 		if (audioContextRef.current) {
 			audioContextRef.current.close()
 		}
-
 		canvasRef.current
 			?.getContext('2d')
 			?.clearRect(0, 0, canvasRef.current?.width, canvasRef.current?.height)
