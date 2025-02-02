@@ -1,6 +1,6 @@
 {
 	"$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-	"changelog": ["@svitejs/changesets-changelog-github-compact", {"repo": "sitek94/tauri-template"}],
+	"changelog": ["@svitejs/changesets-changelog-github-compact", {"repo": "sitek94/justsayit"}],
 	"commit": false,
 	"access": "restricted",
 	"baseBranch": "main",
