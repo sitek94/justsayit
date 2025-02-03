@@ -1,5 +1,12 @@
 # justsayit
 
+## 0.0.8
+
+### Patch Changes
+
+- fix sveltekit static adapter configuration
+  ([`468b397`](https://github.com/sitek94/justsayit/commit/468b3976129497aeceba39248374352ad3828f99))
+
 ## 0.0.7
 
 ### Patch Changes
