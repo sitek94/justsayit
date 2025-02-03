@@ -1,5 +1,6 @@
 <script lang="ts">
-	import {onDestroy} from 'svelte'
+	import {onDestroy, onMount} from 'svelte'
+	import {register, unregister, unregisterAll} from '@tauri-apps/plugin-global-shortcut'
 
 	export let onRecordingComplete: (audioBlob: Blob) => void
 
@@ -145,8 +146,19 @@
 		isRecording = false
 	}
 
+	onMount(() => {
+		register('Control+Q', event => {
+			if (event.state === 'Pressed') {
+				if (isRecording) stopVisualization()
+				else startVisualization()
+			}
+		})
+	})
+
 	onDestroy(() => {
 		if (isRecording) stopVisualization()
+
+		unregister('Control+Q')
 	})
 </script>
 
@@ -156,14 +168,14 @@
 	</div>
 	<div class="inline-flex gap-2">
 		<button
-			class="rounded-md bg-blue-500 px-4 py-2 text-white"
+			class="rounded-md bg-blue-500 px-4 py-2 text-white disabled:opacity-50"
 			on:click={startVisualization}
 			disabled={isRecording}
 		>
 			Start Microphone Visualization
 		</button>
 		<button
-			class="rounded-md bg-red-500 px-4 py-2 text-white"
+			class="rounded-md bg-red-500 px-4 py-2 text-white disabled:opacity-50"
 			on:click={stopVisualization}
 			disabled={!isRecording}
 		>

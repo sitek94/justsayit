@@ -2,6 +2,7 @@
 	import {groq} from '$lib/groq'
 	import AudioVisualizer from '$lib/audio-visualizer.svelte'
 	import {clipboard} from '$lib/clipboard'
+
 	let transcription = $state('')
 
 	const handleRecordingComplete = async (audioBlob: Blob) => {
