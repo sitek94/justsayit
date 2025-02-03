@@ -2,6 +2,13 @@
 
 This template should help get you started developing with Tauri, React and Typescript in Vite.
 
+## Views
+
+- audio input
+- history
+- settings
+  - api keys
+
 ## Recommended IDE Setup
 
 - [VS Code](https://code.visualstudio.com/) +

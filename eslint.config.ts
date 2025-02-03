@@ -1,31 +1,19 @@
 import pluginJs from '@eslint/js'
 import importPlugin from 'eslint-plugin-import'
-import pluginReact from 'eslint-plugin-react'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config({
 	ignores: ['node_modules', 'dist', 'src-tauri'],
-	files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
+	files: ['**/*.{js,mjs,cjs,ts,svelte}'],
 	extends: [
 		pluginJs.configs.recommended,
 		...tseslint.configs.recommended,
-		pluginReact.configs.flat.recommended,
 		importPlugin.flatConfigs.recommended,
 	],
-	languageOptions: {
-		globals: globals.browser,
-		parserOptions: {
-			ecmaFeatures: {
-				jsx: true,
-			},
-		},
-	},
+	languageOptions: {globals: globals.browser},
 	settings: {
-		react: {
-			version: 'detect',
-		},
-		'import/internal-regex': '^@/',
+		'import/internal-regex': '^$lib/',
 	},
 	rules: {
 		'import/no-unresolved': 'off',
@@ -37,7 +25,5 @@ export default tseslint.config({
 				groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
 			},
 		],
-		'react/jsx-uses-react': 'off',
-		'react/react-in-jsx-scope': 'off',
 	},
 })
