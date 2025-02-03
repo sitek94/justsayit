@@ -4,10 +4,9 @@ export const groq = {
 	transcribe,
 }
 
-async function transcribe(buffer: ArrayBuffer) {
+async function transcribe(buffer: ArrayBuffer, apiKey: string) {
 	const client = new Groq({
-		// TODO: Get it from user's settings
-		apiKey: import.meta.env.VITE_GROQ_API_KEY,
+		apiKey,
 		dangerouslyAllowBrowser: true,
 	})
 
