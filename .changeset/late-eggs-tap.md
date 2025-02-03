@@ -1,5 +1,0 @@
----
-'justsayit': patch
----
-
-fix versioning
