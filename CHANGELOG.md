@@ -1,5 +1,12 @@
 # justsayit
 
+## 0.0.9
+
+### Patch Changes
+
+- add groq api key input
+  ([`ee9daf7`](https://github.com/sitek94/justsayit/commit/ee9daf760e03ba83458971133544327eada6eb60))
+
 ## 0.0.8
 
 ### Patch Changes
