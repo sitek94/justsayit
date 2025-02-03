@@ -1,5 +1,11 @@
 # justsayit
 
+## 0.0.6
+
+### Patch Changes
+
+- fix build ([`b8aa97a`](https://github.com/sitek94/justsayit/commit/b8aa97aa9fac878953de9258380c1fd319cb96b4))
+
 ## 0.0.5
 
 ### Patch Changes
