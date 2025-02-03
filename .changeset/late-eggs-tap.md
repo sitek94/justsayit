@@ -1,0 +1,5 @@
+---
+'justsayit': patch
+---
+
+fix versioning
