@@ -1,5 +1,11 @@
 # justsayit
 
+## 0.0.7
+
+### Patch Changes
+
+- fix versioning ([`59adb1a`](https://github.com/sitek94/justsayit/commit/59adb1a6dfa3070d04a58278f979e6ace8179efa))
+
 ## 0.0.6
 
 ### Patch Changes
