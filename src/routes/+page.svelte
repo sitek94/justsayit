@@ -1,7 +1,7 @@
 <script lang="ts">
-	import {groq} from '$lib/groq'
 	import AudioVisualizer from '$lib/audio-visualizer.svelte'
 	import {clipboard} from '$lib/clipboard'
+	import {groq} from '$lib/groq'
 
 	let transcription = $state('')
 

@@ -1,6 +1,6 @@
 <script lang="ts">
+	import {register, unregister} from '@tauri-apps/plugin-global-shortcut'
 	import {onDestroy, onMount} from 'svelte'
-	import {register, unregister, unregisterAll} from '@tauri-apps/plugin-global-shortcut'
 
 	export let onRecordingComplete: (audioBlob: Blob) => void
 
