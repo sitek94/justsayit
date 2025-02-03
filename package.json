@@ -15,8 +15,7 @@
 		"lint": "prettier --check . && eslint .",
 		"lint:fix": "eslint src --fix",
 		"preview": "vite preview",
-		"tauri": "tauri",
-		"typecheck": "tsc --noEmit"
+		"tauri": "tauri"
 	},
 	"dependencies": {
 		"@tauri-apps/api": "^2.2.0",
