@@ -1,5 +1,18 @@
 # justsayit
 
+## 0.0.4
+
+### Patch Changes
+
+- implement super raw but working poc
+  ([`ae97f58`](https://github.com/sitek94/justsayit/commit/ae97f588a71a07ab5529ae47d98a0084020b8826))
+
+  - press <kbd>ctrl+Q</kbd> to start/stop recording
+  - visualize audio in real time
+  - send audio to groq for transcription
+  - display transcription
+  - copy transcription to clipboard
+
 ## 0.0.3
 
 ### Patch Changes
