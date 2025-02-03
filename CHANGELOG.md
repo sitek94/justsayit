@@ -1,5 +1,12 @@
 # justsayit
 
+## 0.0.5
+
+### Patch Changes
+
+- reorganize github actions
+  ([`861d7f8`](https://github.com/sitek94/justsayit/commit/861d7f8ee49c4123c102abcf6cb61c2c836f61b1))
+
 ## 0.0.4
 
 ### Patch Changes
