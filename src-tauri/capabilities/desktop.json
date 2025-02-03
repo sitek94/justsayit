@@ -11,6 +11,8 @@
   "permissions": [
     "updater:default",
     "dialog:default",
-    "stronghold:default"
+    "stronghold:default",
+    "clipboard-manager:default",
+    "clipboard-manager:allow-write-text"
   ]
 }

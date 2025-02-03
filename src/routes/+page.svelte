@@ -1,11 +1,12 @@
 <script lang="ts">
 	import {groq} from '$lib/groq'
 	import AudioVisualizer from '$lib/audio-visualizer.svelte'
-
+	import {clipboard} from '$lib/clipboard'
 	let transcription = $state('')
 
 	const handleRecordingComplete = async (audioBlob: Blob) => {
 		transcription = await groq.transcribe(await audioBlob.arrayBuffer())
+		await clipboard.copy(transcription)
 	}
 </script>
 
