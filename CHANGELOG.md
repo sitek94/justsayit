@@ -1,5 +1,12 @@
 # justsayit
 
+## 0.0.10
+
+### Patch Changes
+
+- enable debug build in production
+  ([`d734c0e`](https://github.com/sitek94/justsayit/commit/d734c0ef7bcb2ac24c19e254e75beebde9aecb65))
+
 ## 0.0.9
 
 ### Patch Changes
