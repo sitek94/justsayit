@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {app} from '@tauri-apps/api'
 	import {register, unregister} from '@tauri-apps/plugin-global-shortcut'
 	import {onDestroy, onMount} from 'svelte'
 
@@ -147,10 +148,13 @@
 	}
 
 	onMount(() => {
-		register('Control+Q', event => {
+		register('Control+Q', async event => {
 			if (event.state === 'Pressed') {
 				if (isRecording) stopVisualization()
-				else startVisualization()
+				else {
+					await app.show()
+					startVisualization()
+				}
 			}
 		})
 	})

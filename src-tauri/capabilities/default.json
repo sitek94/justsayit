@@ -6,12 +6,15 @@
     "main"
   ],
   "permissions": [
+    "core:app:allow-app-show",
+    "core:app:allow-app-hide",
     "core:default",
     "opener:default",
     "process:default",
     "clipboard-manager:default",
     "global-shortcut:allow-is-registered",
     "global-shortcut:allow-register",
-    "global-shortcut:allow-unregister"
+    "global-shortcut:allow-unregister",
+    "store:default"
   ]
 }
