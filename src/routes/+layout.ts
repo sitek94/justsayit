@@ -13,7 +13,6 @@ export const load: LayoutLoad = async () => {
 	if (import.meta.env.PROD) {
 		const version = await getVersion()
 		const update = await check()
-		console.log({update})
 
 		if (update) {
 			const hasAgreed = await ask(
