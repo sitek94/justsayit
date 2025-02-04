@@ -1,5 +1,12 @@
 # justsayit
 
+## 0.0.11
+
+### Patch Changes
+
+- include debug build
+  ([`6496bf5`](https://github.com/sitek94/justsayit/commit/6496bf5fc34a91a836b41725e2260d1ad7cc3068))
+
 ## 0.0.10
 
 ### Patch Changes
