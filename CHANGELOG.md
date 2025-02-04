@@ -1,5 +1,12 @@
 # justsayit
 
+## 0.0.12
+
+### Patch Changes
+
+- remove duplicate debug argument
+  ([`73a8b3c`](https://github.com/sitek94/justsayit/commit/73a8b3cb924167ad50e0d58bb6274a9750f7a2b9))
+
 ## 0.0.11
 
 ### Patch Changes
