@@ -24,7 +24,7 @@ jobs:
       matrix:
         include:
           - platform: 'macos-latest' # for Arm based macs (M1 and above).
-            args: '--target aarch64-apple-darwin --debug' # TODO: remove debug post mvp
+            args: '--target aarch64-apple-darwin'
 
           # Uncomment the platform you want to use
           # - platform: 'macos-latest' # for Intel based macs.
