@@ -1,5 +1,15 @@
 # justsayit
 
+## 0.0.13
+
+### Patch Changes
+
+- persist user settings
+  ([`4765fef`](https://github.com/sitek94/justsayit/commit/4765fefb2a0816186e9c420e011adeb8cb3085ea))
+
+- bring app to front on global shortcut and start recording
+  ([`51973db`](https://github.com/sitek94/justsayit/commit/51973db62ed1ab03bf3444fc92c6373d3ae1ce8a))
+
 ## 0.0.12
 
 ### Patch Changes
