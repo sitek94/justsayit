@@ -2,19 +2,22 @@
 	import {app} from '@tauri-apps/api'
 	import {register, unregister} from '@tauri-apps/plugin-global-shortcut'
 	import {onDestroy, onMount} from 'svelte'
+	import FrequencyVisualizer from './frequency-visualizer.svelte'
 
-	export let onRecordingComplete: (audioBlob: Blob) => void
+	let {onRecordingComplete}: {onRecordingComplete: (audioBlob: Blob) => void} = $props()
 
-	let isRecording = false
-	let canvas: HTMLCanvasElement
+	let isRecording = $state(false)
+	// let canvas: HTMLCanvasElement
+
+	let frequencyData = $state<number[]>([])
 
 	// Refs equivalents
-	let mediaRecorder: MediaRecorder | null = null
-	const chunks: Blob[] = []
-	let audioContext: AudioContext | null = null
-	let analyser: AnalyserNode | null = null
-	let bufferLength = 0
-	let animationFrameId = -1
+	let mediaRecorder = $state<MediaRecorder | null>(null)
+	const chunks = $state<Blob[]>([])
+	let audioContext = $state<AudioContext | null>(null)
+	let analyser = $state<AnalyserNode | null>(null)
+	let bufferLength = $state(0)
+	let animationFrameId = $state(-1)
 
 	const getPos = (Hz: number, minHz: number, maxHz: number, max: number): number => {
 		if (Hz > minHz) {
@@ -23,7 +26,13 @@
 		return 0
 	}
 
-	const getFFTbars = (fft: AnalyserNode, barCount: number, minHz = 20, maxHz = 12000): number[] => {
+	const getFFTbars = (
+		fft: AnalyserNode | null,
+		barCount: number,
+		minHz = 20,
+		maxHz = 12000,
+	): number[] => {
+		if (!fft) return []
 		const dataArray = new Float32Array(bufferLength)
 		fft.getFloatFrequencyData(dataArray)
 		const out: number[] = []
@@ -70,26 +79,26 @@
 		return out
 	}
 
-	const draw = () => {
-		const canvasCtx = canvas?.getContext('2d')
-		if (!canvas || !canvasCtx || !analyser) return
+	// const draw = () => {
+	// 	const canvasCtx = canvas?.getContext('2d')
+	// 	if (!canvas || !canvasCtx || !analyser) return
 
-		const bars = getFFTbars(analyser, 72)
-		canvasCtx.clearRect(0, 0, canvas.width, canvas.height)
-		canvasCtx.fillStyle = 'rgb(255, 255, 255)'
-		canvasCtx.beginPath()
+	// 	const bars = getFFTbars(analyser, 72)
+	// 	canvasCtx.clearRect(0, 0, canvas.width, canvas.height)
+	// 	canvasCtx.fillStyle = 'rgb(255, 255, 255)'
+	// 	canvasCtx.beginPath()
 
-		for (let i = 0; i < bars.length; i++) {
-			canvasCtx.rect(
-				i * 10,
-				canvas.height - ((bars[i] + 64) * (canvas.height / 2)) / 64,
-				8,
-				canvas.height,
-			)
-		}
+	// 	for (let i = 0; i < bars.length; i++) {
+	// 		canvasCtx.rect(
+	// 			i * 10,
+	// 			canvas.height - ((bars[i] + 64) * (canvas.height / 2)) / 64,
+	// 			8,
+	// 			canvas.height,
+	// 		)
+	// 	}
 
-		canvasCtx.fill()
-	}
+	// 	canvasCtx.fill()
+	// }
 
 	const startVisualization = async () => {
 		if (isRecording) return
@@ -115,7 +124,10 @@
 			source.connect(analyser)
 
 			const animate = () => {
-				draw()
+				// draw()
+
+				const bars = getFFTbars(analyser, 72)
+				frequencyData = bars
 				animationFrameId = requestAnimationFrame(animate)
 			}
 			animationFrameId = requestAnimationFrame(animate)
@@ -142,7 +154,9 @@
 		// Cleanup
 		cancelAnimationFrame(animationFrameId)
 		audioContext?.close()
-		canvas.getContext('2d')?.clearRect(0, 0, canvas.width, canvas.height)
+		analyser = null
+		frequencyData = []
+		// canvas.getContext('2d')?.clearRect(0, 0, canvas.width, canvas.height)
 
 		isRecording = false
 	}
@@ -167,20 +181,18 @@
 </script>
 
 <div>
-	<div>
-		<canvas bind:this={canvas} width={720} height={400}></canvas>
-	</div>
+	<FrequencyVisualizer {frequencyData} />
 	<div class="inline-flex gap-2">
 		<button
 			class="rounded-md bg-blue-500 px-4 py-2 text-white disabled:opacity-50"
-			on:click={startVisualization}
+			onclick={startVisualization}
 			disabled={isRecording}
 		>
 			Start Microphone Visualization
 		</button>
 		<button
 			class="rounded-md bg-red-500 px-4 py-2 text-white disabled:opacity-50"
-			on:click={stopVisualization}
+			onclick={stopVisualization}
 			disabled={!isRecording}
 		>
 			Stop Visualization
