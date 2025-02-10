@@ -12,9 +12,11 @@
   "app": {
     "windows": [
       {
-        "title": "justsayit",
-        "width": 800,
-        "height": 600
+        
+        "decorations": false,
+        "resizable": false,
+        "width": 300,
+        "height": 150
       }
     ],
     "security": {

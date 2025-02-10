@@ -6,11 +6,12 @@
 	import {groq} from '$lib/groq'
 	import {playStartSound, playStopSound} from '$lib/play-sound'
 	import {settings} from '$lib/settings'
+
 	let canvas: HTMLCanvasElement
 
-	let mediaRecorder = $state<MediaRecorder | null>(null)
 	let audioContext = $state<AudioContext | null>(null)
 	let transcription = $state('')
+	let isLoading = $state(false)
 
 	let onSuccess = function (stream: MediaStream) {
 		const canvasCtx = canvas?.getContext('2d')
@@ -31,9 +32,13 @@
 
 		recorder.onstop = async () => {
 			playStopSound()
+			isLoading = true
 			const blob = new Blob(chunks, {type: recorder.mimeType})
 			transcription = await groq.transcribe(await blob.arrayBuffer(), $settings.groqApiKey)
 			await clipboard.copy(transcription)
+
+			isLoading = false
+
 			chunks = []
 		}
 
@@ -47,8 +52,6 @@
 				}
 			}
 		})
-
-		mediaRecorder = recorder
 	}
 
 	let onError = function (err: unknown) {
@@ -110,18 +113,6 @@
 		}
 	}
 
-	function handleStart() {
-		if (!mediaRecorder) return
-
-		mediaRecorder.start()
-	}
-
-	async function handleStop() {
-		if (!mediaRecorder) return
-
-		mediaRecorder.stop()
-	}
-
 	onMount(() => {
 		navigator.mediaDevices.getUserMedia({audio: true}).then(onSuccess, onError)
 	})
@@ -131,13 +122,11 @@
 	})
 </script>
 
-<canvas bind:this={canvas}></canvas>
-
-{#if transcription}
-	<div class="mt-4">
-		<p class="text-green-500">Transcription: {transcription}</p>
-	</div>
-{/if}
-
-<button onclick={handleStart}>Start</button>
-<button onclick={handleStop}>Stop</button>
+<div class="relative">
+	{#if isLoading}
+		<div class="absolute inset-0 z-10 flex items-center justify-center bg-black/75">
+			<p class="text-white">Loading...</p>
+		</div>
+	{/if}
+	<canvas class:blur-lg={isLoading} bind:this={canvas}></canvas>
+</div>
