@@ -1,5 +1,18 @@
 # justsayit
 
+## 0.0.13
+
+### Patch Changes
+
+- simplify ui, add sounds and remove window decorations
+  ([`1b416f2`](https://github.com/sitek94/justsayit/commit/1b416f2658841b3b4e101c08a13de95c0a1ada9e))
+
+- persist user settings
+  ([`4765fef`](https://github.com/sitek94/justsayit/commit/4765fefb2a0816186e9c420e011adeb8cb3085ea))
+
+- bring app to front on global shortcut and start recording
+  ([`51973db`](https://github.com/sitek94/justsayit/commit/51973db62ed1ab03bf3444fc92c6373d3ae1ce8a))
+
 ## 0.0.12
 
 ### Patch Changes
