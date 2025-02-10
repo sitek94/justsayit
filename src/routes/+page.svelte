@@ -1,27 +1,143 @@
 <script lang="ts">
-	import AudioVisualizer from '$lib/audio-visualizer.svelte'
+	import {app} from '@tauri-apps/api'
+	import {register, unregister} from '@tauri-apps/plugin-global-shortcut'
+	import {onDestroy, onMount} from 'svelte'
 	import {clipboard} from '$lib/clipboard'
 	import {groq} from '$lib/groq'
+	import {playStartSound, playStopSound} from '$lib/play-sound'
 	import {settings} from '$lib/settings'
+	let canvas: HTMLCanvasElement
 
+	let mediaRecorder = $state<MediaRecorder | null>(null)
+	let audioContext = $state<AudioContext | null>(null)
 	let transcription = $state('')
 
-	const handleRecordingComplete = async (audioBlob: Blob) => {
-		transcription = await groq.transcribe(await audioBlob.arrayBuffer(), $settings.groqApiKey)
-		await clipboard.copy(transcription)
+	let onSuccess = function (stream: MediaStream) {
+		const canvasCtx = canvas?.getContext('2d')
+		if (!canvasCtx) return
+
+		let chunks: Blob[] = []
+		const recorder = new MediaRecorder(stream)
+
+		visualize(stream, canvasCtx)
+
+		recorder.ondataavailable = function (e) {
+			chunks.push(e.data)
+		}
+
+		recorder.onstart = () => {
+			playStartSound()
+		}
+
+		recorder.onstop = async () => {
+			playStopSound()
+			const blob = new Blob(chunks, {type: recorder.mimeType})
+			transcription = await groq.transcribe(await blob.arrayBuffer(), $settings.groqApiKey)
+			await clipboard.copy(transcription)
+			chunks = []
+		}
+
+		register('Control+Q', async event => {
+			if (event.state === 'Pressed') {
+				if (recorder.state === 'recording') {
+					recorder.stop()
+				} else {
+					await app.show()
+					recorder.start()
+				}
+			}
+		})
+
+		mediaRecorder = recorder
 	}
+
+	let onError = function (err: unknown) {
+		console.log('The following error occured: ' + err)
+	}
+
+	function visualize(stream: MediaStream, canvasCtx: CanvasRenderingContext2D) {
+		if (!audioContext) {
+			audioContext = new AudioContext()
+		}
+
+		const source = audioContext.createMediaStreamSource(stream)
+
+		const bufferLength = 2048
+		const analyser = audioContext.createAnalyser()
+		analyser.fftSize = bufferLength
+		const dataArray = new Uint8Array(bufferLength)
+
+		source.connect(analyser)
+
+		draw()
+
+		function draw() {
+			if (!canvasCtx) return
+
+			const WIDTH = canvas.width
+			const HEIGHT = canvas.height
+
+			requestAnimationFrame(draw)
+
+			analyser.getByteTimeDomainData(dataArray)
+
+			canvasCtx.fillStyle = 'rgb(200, 200, 200)'
+			canvasCtx.fillRect(0, 0, WIDTH, HEIGHT)
+
+			canvasCtx.lineWidth = 2
+			canvasCtx.strokeStyle = 'rgb(0, 0, 0)'
+
+			canvasCtx.beginPath()
+
+			let sliceWidth = (WIDTH * 1.0) / bufferLength
+			let x = 0
+
+			for (let i = 0; i < bufferLength; i++) {
+				let v = dataArray[i] / 128.0
+				let y = (v * HEIGHT) / 2
+
+				if (i === 0) {
+					canvasCtx.moveTo(x, y)
+				} else {
+					canvasCtx.lineTo(x, y)
+				}
+
+				x += sliceWidth
+			}
+
+			canvasCtx.lineTo(canvas.width, canvas.height / 2)
+			canvasCtx.stroke()
+		}
+	}
+
+	function handleStart() {
+		if (!mediaRecorder) return
+
+		mediaRecorder.start()
+	}
+
+	async function handleStop() {
+		if (!mediaRecorder) return
+
+		mediaRecorder.stop()
+	}
+
+	onMount(() => {
+		navigator.mediaDevices.getUserMedia({audio: true}).then(onSuccess, onError)
+	})
+
+	onDestroy(() => {
+		unregister('Control+Q')
+	})
 </script>
 
-<main class="flex min-h-screen items-center justify-center bg-zinc-100 dark:bg-zinc-900">
-	<div class="p-8 text-center">
-		<h1 class="mb-8 text-4xl font-bold text-zinc-800 dark:text-white">justsayit</h1>
+<canvas bind:this={canvas}></canvas>
 
-		<AudioVisualizer onRecordingComplete={handleRecordingComplete} />
-
-		{#if transcription}
-			<div class="mt-4">
-				<p class="text-green-500">Transcription: {transcription}</p>
-			</div>
-		{/if}
+{#if transcription}
+	<div class="mt-4">
+		<p class="text-green-500">Transcription: {transcription}</p>
 	</div>
-</main>
+{/if}
+
+<button onclick={handleStart}>Start</button>
+<button onclick={handleStop}>Stop</button>
