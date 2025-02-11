@@ -6,15 +6,18 @@
     "main"
   ],
   "permissions": [
-    "core:app:allow-app-show",
-    "core:app:allow-app-hide",
-    "core:default",
-    "opener:default",
-    "process:default",
     "clipboard-manager:default",
+    "core:app:allow-app-hide",
+    "core:app:allow-app-show",
+    "core:app:allow-default-window-icon",
+    "core:tray:default",
+    "core:default",
+    "core:window:allow-start-dragging",
     "global-shortcut:allow-is-registered",
     "global-shortcut:allow-register",
     "global-shortcut:allow-unregister",
+    "opener:default",
+    "process:default",
     "store:default"
   ]
 }

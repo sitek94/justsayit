@@ -1,12 +1,40 @@
 <script lang="ts">
-	import {onMount} from 'svelte'
-	import {initializeSettings, internalSettings, hasRequiredSettings} from '$lib/settings'
+	import {defaultWindowIcon} from '@tauri-apps/api/app'
+	import {Menu} from '@tauri-apps/api/menu'
+	import {TrayIcon} from '@tauri-apps/api/tray'
+	import {exit} from '@tauri-apps/plugin-process'
+	import {onMount, type Snippet} from 'svelte'
+	import {hasRequiredSettings, initializeSettings, internalSettings} from '$lib/settings'
 	import Settings from '$lib/settings.svelte'
 
-	let isLoading = true
+	let {children} = $props<{children: Snippet}>()
+	let isLoading = $state(true)
 
 	onMount(async () => {
 		await initializeSettings()
+
+		const menu = await Menu.new({
+			items: [
+				{
+					id: 'quit',
+					text: 'Quit',
+					action: async () => {
+						await exit()
+					},
+				},
+			],
+		})
+
+		const options = {
+			menu,
+			menuOnLeftClick: true,
+			icon: (await defaultWindowIcon())!,
+		}
+
+		const tray = await TrayIcon.new(options)
+
+		console.log(tray)
+
 		isLoading = false
 	})
 </script>
@@ -21,5 +49,5 @@
 		<Settings />
 	</div>
 {:else}
-	<slot />
+	{@render $children()}
 {/if}

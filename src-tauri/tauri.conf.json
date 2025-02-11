@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        
+    
         "decorations": false,
         "resizable": false,
         "width": 300,
