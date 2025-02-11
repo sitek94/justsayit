@@ -1,5 +1,15 @@
 # justsayit
 
+## 0.0.14
+
+### Patch Changes
+
+- - format transcript using llm
+    ([`648ecbb`](https://github.com/sitek94/justsayit/commit/648ecbb074d622aaa483d4eefe9a4d1a91da5fa9))
+  - open settings in new webview window
+  - add system tray with quit action
+  - make app window draggable
+
 ## 0.0.13
 
 ### Patch Changes
