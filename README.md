@@ -1,6 +1,11 @@
 # Tauri + React + Typescript
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+> [!WARNING]
+>
+> This code is **a mess**. It’s a PoC where I'm constantly experimenting, changing things, and publishing everything as
+> I go to test the app in action.
+>
+> You’ve been warned. Enter at your own risk.
 
 ## Views
 

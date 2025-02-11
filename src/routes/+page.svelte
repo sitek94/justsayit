@@ -1,5 +1,5 @@
 <script lang="ts">
-	import {app} from '@tauri-apps/api'
+	import {getAllWebviewWindows} from '@tauri-apps/api/webviewWindow'
 	import {register, unregister} from '@tauri-apps/plugin-global-shortcut'
 	import {onDestroy, onMount} from 'svelte'
 	import {ai} from '$lib/ai'
@@ -7,7 +7,6 @@
 	import {groq} from '$lib/groq'
 	import {playStartSound, playStopSound} from '$lib/play-sound'
 	import {settings} from '$lib/settings'
-
 	let canvas: HTMLCanvasElement
 
 	let audioContext = $state<AudioContext | null>(null)
@@ -54,7 +53,12 @@
 				if (recorder.state === 'recording') {
 					recorder.stop()
 				} else {
-					await app.show()
+					// `app.show() steals the focus`
+					// probably I could just get a webview by its label, just experimenting for now
+					const [webview] = await getAllWebviewWindows()
+
+					webview.show()
+
 					recorder.start()
 				}
 			}
