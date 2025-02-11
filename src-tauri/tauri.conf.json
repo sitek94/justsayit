@@ -12,12 +12,13 @@
   "app": {
     "windows": [
       {
-    
+        "label": "main",
         "decorations": false,
         "resizable": false,
         "width": 300,
         "height": 150
       }
+      
     ],
     "security": {
       "csp": null

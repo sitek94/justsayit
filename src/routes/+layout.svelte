@@ -2,13 +2,15 @@
 	import {defaultWindowIcon} from '@tauri-apps/api/app'
 	import {Menu} from '@tauri-apps/api/menu'
 	import {TrayIcon} from '@tauri-apps/api/tray'
+	import {WebviewWindow} from '@tauri-apps/api/webviewWindow'
 	import {exit} from '@tauri-apps/plugin-process'
-	import {onMount, type Snippet} from 'svelte'
+	import {onDestroy, onMount, type Snippet} from 'svelte'
 	import {hasRequiredSettings, initializeSettings, internalSettings} from '$lib/settings'
 	import Settings from '$lib/settings.svelte'
 
-	let {children} = $props<{children: Snippet}>()
+	let {children}: {children: Snippet} = $props()
 	let isLoading = $state(true)
+	let trayId = $state<string | null>(null)
 
 	onMount(async () => {
 		await initializeSettings()
@@ -22,6 +24,27 @@
 						await exit()
 					},
 				},
+				{
+					id: 'settings',
+					text: 'Settings',
+					action: async () => {
+						const webview = new WebviewWindow('settings', {
+							title: 'Settings',
+							decorations: true,
+							resizable: false,
+							width: 300,
+							height: 350,
+							url: '/settings',
+						})
+
+						webview.once('tauri://created', () => {
+							webview.show()
+						})
+						webview.once('tauri://error', e => {
+							console.error(e)
+						})
+					},
+				},
 			],
 		})
 
@@ -33,9 +56,15 @@
 
 		const tray = await TrayIcon.new(options)
 
-		console.log(tray)
+		trayId = tray.id
 
 		isLoading = false
+	})
+
+	onDestroy(() => {
+		if (trayId) {
+			TrayIcon.removeById(trayId)
+		}
 	})
 </script>
 
@@ -49,5 +78,5 @@
 		<Settings />
 	</div>
 {:else}
-	{@render $children()}
+	{@render children()}
 {/if}
