@@ -124,9 +124,12 @@
 
 <div class="relative">
 	{#if isLoading}
-		<div class="absolute inset-0 z-10 flex items-center justify-center bg-black/75">
+		<div
+			data-tauri-drag-region
+			class="absolute inset-0 z-10 flex items-center justify-center bg-black/75"
+		>
 			<p class="text-white">Loading...</p>
 		</div>
 	{/if}
-	<canvas class:blur-lg={isLoading} bind:this={canvas}></canvas>
+	<canvas data-tauri-drag-region class:blur-lg={isLoading} bind:this={canvas}></canvas>
 </div>
