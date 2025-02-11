@@ -7,12 +7,21 @@
 >
 > You’ve been warned. Enter at your own risk.
 
-## Views
+## v0
 
-- audio input
-- history
-- settings
-  - api keys
+- [x] simple audio input
+- [x] settings
+  - [x] api keys
+  - [x] format with AI toggle
+  - [x] persist settings
+  - [ ] paste text after processing
+- [x] auto update
+- [x] tray icon menu
+  - [x] quit
+  - [x] settings
+- [ ] history (simple, stored in file system: audio + transcript + llm response)
+  - [ ] maybe tray menu action to open history file dir
+- [ ] retry mechanism
 
 ## Recommended IDE Setup
 
