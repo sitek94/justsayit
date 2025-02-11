@@ -1,7 +1,7 @@
 <script lang="ts">
 	import {settings, updateSettings, type Settings} from '$lib/settings'
 
-	let currentSettings: Settings = $settings ?? {groqApiKey: ''}
+	let currentSettings: Settings = $settings ?? {groqApiKey: '', openaiApiKey: ''}
 
 	function handleSubmit() {
 		updateSettings(currentSettings)
@@ -15,11 +15,21 @@
 			<span class="text-red-500">*</span>
 		</label>
 		<input
-			type="password"
+			type="text"
 			id="groqApiKey"
 			bind:value={currentSettings.groqApiKey}
 			class="w-full rounded-lg border border-gray-300 p-2.5"
 			required
+		/>
+	</div>
+
+	<div>
+		<label for="openaiApiKey" class="mb-2 block text-sm font-medium">OpenAI API Key</label>
+		<input
+			type="text"
+			id="openaiApiKey"
+			bind:value={currentSettings.openaiApiKey}
+			class="w-full rounded-lg border border-gray-300 p-2.5"
 		/>
 	</div>
 

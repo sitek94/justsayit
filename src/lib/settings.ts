@@ -2,7 +2,8 @@ import {LazyStore} from '@tauri-apps/plugin-store'
 import {writable, derived, type Writable} from 'svelte/store'
 
 export type Settings = {
-	groqApiKey: string // Required setting, no longer optional
+	groqApiKey: string
+	openaiApiKey: string
 }
 
 const persistentStore = new LazyStore('settings.json')

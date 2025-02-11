@@ -2,6 +2,7 @@
 	import {app} from '@tauri-apps/api'
 	import {register, unregister} from '@tauri-apps/plugin-global-shortcut'
 	import {onDestroy, onMount} from 'svelte'
+	import {ai} from '$lib/ai'
 	import {clipboard} from '$lib/clipboard'
 	import {groq} from '$lib/groq'
 	import {playStartSound, playStopSound} from '$lib/play-sound'
@@ -12,6 +13,7 @@
 	let audioContext = $state<AudioContext | null>(null)
 	let transcription = $state('')
 	let isLoading = $state(false)
+	let formatWithAi = $state(true)
 
 	let onSuccess = function (stream: MediaStream) {
 		const canvasCtx = canvas?.getContext('2d')
@@ -35,6 +37,11 @@
 			isLoading = true
 			const blob = new Blob(chunks, {type: recorder.mimeType})
 			transcription = await groq.transcribe(await blob.arrayBuffer(), $settings.groqApiKey)
+
+			if (formatWithAi) {
+				transcription = await ai.format(transcription, $settings.openaiApiKey)
+			}
+
 			await clipboard.copy(transcription)
 
 			isLoading = false
@@ -132,4 +139,13 @@
 		</div>
 	{/if}
 	<canvas data-tauri-drag-region class:blur-lg={isLoading} bind:this={canvas}></canvas>
+
+	<div class="absolute right-0 bottom-0 left-0">
+		<button
+			class="rounded-lg bg-blue-500 p-2 text-white"
+			onclick={() => (formatWithAi = !formatWithAi)}
+		>
+			AI: {formatWithAi ? 'On' : 'Off'}
+		</button>
+	</div>
 </div>
