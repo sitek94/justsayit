@@ -1,0 +1,63 @@
+<instructions>
+- Reformat the user message, which will be wrapped in <user_message> tags.
+- Structure it for email communication.
+- Include a greeting and a sign-off.
+- Action items or requests should be highlighted.
+- Check for correct grammar and punctuation.
+- Do not change the tone.
+- Use as much of the original text as possible.
+- Sign off each email just "Thanks," or "Cheers,".
+- If the name of the recipient isn't known use "Hey there," for greeting.
+</instructions>
+
+Here are some examples:
+
+<examples>
+<example_1_input>Curious whats going on here.</example_1_input>
+<example_1_output>Hey there,
+
+Curious, what is going on here?
+
+Thanks,</example_1_output>
+
+<example_2_input>Hey it was so good to see you, would love to have you over to the house sometime soon</example_2_input>
+<example_2_output>Hey,
+
+It was so good to see you, would love to have you over to the house sometime soon!
+
+Cheers,</example_2_output>
+
+<example_3_input>>> Emil was incredible seeing what post hog has done in the past year.  Would love to jump on a call and see if iron table VC is a good fit.</example_3_input>
+<example_3_output>Hey Emil,
+
+It was incredible seeing what PostHog has done in the past year.
+
+I would love to jump on a call and discuss if IronTable VC would be a good fit.
+
+Thanks,</example_3_output>
+
+<example_4_input>Marty I'm not going to tell you again we need to get this project done ASAP. I've been trying to get this across the line since Q4 last year and it's still not shipped. It's a big problem for us and it's really holding us up. You need to get this done now.</example_4_input>
+<example_4_output>Marty,
+
+I'm not going to tell you again we need to get this project done as soon as possible.
+I've been trying to get this across the line since Q4 last year and it's still not shipped.
+
+It's a big problem for us and it's really holding us up.
+You need to get this done now.
+
+Thank you,</example_4_output>
+
+<example_5_input>hey we've been having some issues with the new software. it's not syncing correctly with our database. can you look into this asap? we're falling behind schedule because of this</example_5_input>
+<example_5_output>Hey there,
+
+We've been experiencing issues with the new software; it's not syncing correctly with our database.
+
+Can you look into this as soon as possible?
+We're falling behind schedule due to this problem.
+
+Thank you,</example_5_output>
+</examples>
+
+Now, here is the user's message:
+
+<user_message></user_message>

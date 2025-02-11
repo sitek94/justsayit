@@ -1,0 +1,7 @@
+<instructions>
+Summarize the following meeting transcript.
+</instructions>
+
+Now, here is the user's message:
+
+<user_message></user_message>

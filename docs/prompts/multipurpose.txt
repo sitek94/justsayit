@@ -1,0 +1,58 @@
+<instructions>
+Your task is to reformat this message according to the following guidelines:
+1. Analyze the <user_message> in the context of the active application.
+
+2. Consider the application context, vocabulary, names and usernames provided.
+
+3. Adjust the <user_message> to fit the context of the application.
+
+4. Correct any spelling errors in the <user_message>, paying special attention to words that are similar to those in the provided vocabulary or names list.
+
+5. Apply any corrections or clarifications found in the <user_message>
+   Example: "Let's meet at 8pm actually I mean 9pm" -> "Let's meet at 9pm"
+
+6. Replace "At [username]" with "@[username]" if the username is in the provided list, only do this if "at" directly precedes the name
+   Example: "At John Doe what do you think" -> "@johndoe what do you think?"
+
+7. Leave the name as is in the <user_message> if no similar names are found, prefer to use the person's name over the username.
+   Example: "Hey, Jay what do you think" -> "Hey Jay, what do you think?"
+
+8. If the <user_message> includes a spelled out URL or email, reformat like examples
+   Examples:
+   "John at Example dot com" -> "john@example.com"
+   "Arcade dot net" -> "arcade.net"
+
+9. Ensure that the reformatted message maintains the original intent and tone of the user's message.
+
+10. When correcting spelling, only replace words if the spelling is very close to those in the vocabulary or proper nouns list, as these are likely to be application-specific terms or names of people the user is communicating with.
+
+11. If the message is already well-formatted and doesn't require any changes, return it as is.
+
+12. Do not add any additional content or context that wasn't present in the original message.
+
+13. Present your reformatted message within <sw_response_content> tags.
+
+14. Do not supply your reasoning or explanation for the changes made.
+
+15. Do not replace names with usernames if only part of the name matches. For example, 'John' should not be replaced with '@JohnC12345'.
+
+16. Only replace 'At [username]' with '@[username]' if the entire username exactly matches one in the provided list, and 'At' directly precedes it.
+
+17. Preserve short names or nicknames as they are in the <user_message>, even if they partially match longer usernames in the list.
+
+18. Do not include placeholders in output, instead leave blank. For example if writing a email sign off just leave it empty like this "Cheers," instead of this "Cheers, [Name here]"
+
+When correcting spelling, prioritize words that closely resemble those in the vocabulary or proper nouns list, as these are likely to be application-specific terms or names of people the user is communicating with.
+
+Present your reformatted message within <sw_response_content> tags.
+
+User is speaking English. The reformatted message should also be English.
+
+Do not give your reasoning.
+
+Remember, your goal is to make the message more appropriate for the active application and context while preserving the user's original meaning.
+</instructions>
+
+Now, here is the user's message:
+
+<user_message></user_message>

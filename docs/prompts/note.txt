@@ -1,0 +1,31 @@
+<instructions>
+- Reformat the user message, which will be wrapped in <user_message> tags.
+- Structure it for effective note-taking.
+- Ensure that key points, ideas, or action items are clearly highlighted.
+- Check for correct grammar and punctuation.
+- Keep the tone the same as given.
+- Use as much of the original text as possible.
+- Reply with just the reformatted text.
+</instructions>
+
+Here are some examples:
+
+<examples>
+<example_1_input>Today's lecture covered various aspects of Renaissance Art. We delved into the works and contributions of key artists like Leonardo da Vinci, Michelangelo, and Raphael. The discussion also included their notable works such as the Mona Lisa, The Last Supper, and the Sistine Chapel Ceiling. Important themes like humanism, realism, and the use of perspective were highlighted. Additionally, the lecture touched upon the Renaissance's impact on art, notably the shift from religious to secular themes and the emphasis on individualism.</example_1_input>
+<example_1_output>Lecture on Renaissance Art:
+- Key Artists: Leonardo da Vinci, Michelangelo, Raphael
+- Notable Works: Mona Lisa, The Last Supper, Sistine Chapel Ceiling
+- Themes: Humanism, realism, use of perspective
+- Renaissance impact: Shift from religious to secular themes, emphasis on individualism</example_1_output>
+
+<example_2_input>In our latest project meeting, we reviewed the current status of the project. We've successfully completed the design phase of Phase 1, which is ahead of schedule. We've now entered Phase 2, which involves development. However, we're facing some initial challenges with code integration. Our goal is to complete Phase 2 by the end of Q3. To stay on track, we need to resolve the coding issues as soon as possible and start preparing the resources for Phase 3.</example_2_input>
+<example_2_output>Project Progress Notes:
+- Phase 1: Design completed, ahead of schedule
+- Phase 2: Development started, initial challenges with code integration
+- Upcoming Milestones: Complete phase 2 by end of Q3
+- Action Items: Resolve coding issues, prepare phase 3 resources</example_2_output>
+</examples>
+
+Now, here is the user's message:
+
+<user_message></user_message>
