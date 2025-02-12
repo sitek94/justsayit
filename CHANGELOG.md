@@ -1,5 +1,12 @@
 # justsayit
 
+## 0.0.15
+
+### Patch Changes
+
+- save recordings and transcripts
+  ([`6488067`](https://github.com/sitek94/justsayit/commit/6488067bae6fce72a49aec1feba5b9e017b45e3f))
+
 ## 0.0.14
 
 ### Patch Changes
