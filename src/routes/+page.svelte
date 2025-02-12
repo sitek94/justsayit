@@ -4,13 +4,14 @@
 	import {onDestroy, onMount} from 'svelte'
 	import {ai} from '$lib/ai'
 	import {clipboard} from '$lib/clipboard'
+	import {fileSystem} from '$lib/file-system'
 	import {groq} from '$lib/groq'
 	import {playStartSound, playStopSound} from '$lib/play-sound'
 	import {settings} from '$lib/settings'
 	let canvas: HTMLCanvasElement
 
 	let audioContext = $state<AudioContext | null>(null)
-	let transcription = $state('')
+	let transcript = $state('')
 	let isLoading = $state(false)
 	let formatWithAi = $state(true)
 
@@ -34,14 +35,15 @@
 		recorder.onstop = async () => {
 			playStopSound()
 			isLoading = true
-			const blob = new Blob(chunks, {type: recorder.mimeType})
-			transcription = await groq.transcribe(await blob.arrayBuffer(), $settings.groqApiKey)
+			const audio = new Blob(chunks, {type: recorder.mimeType})
+			transcript = await groq.transcribe(await audio.arrayBuffer(), $settings.groqApiKey)
 
 			if (formatWithAi) {
-				transcription = await ai.format(transcription, $settings.openaiApiKey)
+				transcript = await ai.format(transcript, $settings.openaiApiKey)
 			}
 
-			await clipboard.copy(transcription)
+			await clipboard.copy(transcript)
+			await fileSystem.saveRecording({audio, transcript})
 
 			isLoading = false
 

@@ -19,7 +19,7 @@
 - [x] tray icon menu
   - [x] quit
   - [x] settings
-- [ ] history (simple, stored in file system: audio + transcript + llm response)
+- [x] history (simple, stored in file system: audio + transcript + llm response)
   - [ ] maybe tray menu action to open history file dir
 - [ ] retry mechanism
 

@@ -5,9 +5,9 @@
 	import {WebviewWindow} from '@tauri-apps/api/webviewWindow'
 	import {exit} from '@tauri-apps/plugin-process'
 	import {onDestroy, onMount, type Snippet} from 'svelte'
+	import {fileSystem} from '$lib/file-system'
 	import {hasRequiredSettings, initializeSettings, internalSettings} from '$lib/settings'
 	import Settings from '$lib/settings.svelte'
-
 	let {children}: {children: Snippet} = $props()
 	let isLoading = $state(true)
 	let trayId = $state<string | null>(null)
@@ -57,6 +57,8 @@
 		const tray = await TrayIcon.new(options)
 
 		trayId = tray.id
+
+		await fileSystem.ensureAppDirectoriesExist()
 
 		isLoading = false
 	})
