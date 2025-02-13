@@ -1,5 +1,11 @@
 # justsayit
 
+## 0.0.16
+
+### Patch Changes
+
+- bump version ([`5a6665e`](https://github.com/sitek94/justsayit/commit/5a6665e145c7a30a74ab62da0a91434b48d94c57))
+
 ## 0.0.15
 
 ### Patch Changes
