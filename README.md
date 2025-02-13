@@ -10,6 +10,8 @@
 ## v0
 
 - [x] simple audio input
+  - [ ] prevent sending empty messages (no audio)
+  - [ ] cancel recording
 - [x] settings
   - [x] api keys
   - [x] format with AI toggle
