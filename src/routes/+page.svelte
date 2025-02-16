@@ -121,7 +121,7 @@
 
 			analyser.getByteTimeDomainData(dataArray)
 
-			canvasCtx.fillStyle = 'rgb(200, 200, 200)'
+			canvasCtx.fillStyle = '#ccc'
 			canvasCtx.fillRect(0, 0, WIDTH, HEIGHT)
 
 			canvasCtx.lineWidth = 2
@@ -159,7 +159,7 @@
 	})
 </script>
 
-<div class="relative">
+<div class="relative flex flex-col">
 	{#if isLoading}
 		<div
 			data-tauri-drag-region
@@ -168,10 +168,14 @@
 			<p class="text-white">Loading...</p>
 		</div>
 	{/if}
-	<canvas class="w-full" data-tauri-drag-region class:blur-lg={isLoading} bind:this={canvas}
+	<canvas
+		class="h-[130px] w-full"
+		data-tauri-drag-region
+		class:blur-lg={isLoading}
+		bind:this={canvas}
 	></canvas>
 
-	<div class="fixed bottom-1 left-0 right-0 flex justify-evenly text-sm">
+	<div class="flex justify-evenly bg-[#ccc] text-sm">
 		<button
 			class="rounded-lg bg-gray-500 px-1 text-white"
 			onclick={() => (formatWithAi = !formatWithAi)}
