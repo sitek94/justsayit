@@ -8,12 +8,12 @@
 	import {groq} from '$lib/groq'
 	import {playStartSound, playStopSound} from '$lib/play-sound'
 	import {settings} from '$lib/settings'
-	let canvas: HTMLCanvasElement
 
+	let canvas: HTMLCanvasElement
 	let audioContext = $state<AudioContext | null>(null)
-	let transcript = $state('')
 	let isLoading = $state(false)
 	let formatWithAi = $state(true)
+	let preset: 'default' | 'message' | 'note' | 'email' = $state('default')
 
 	let onSuccess = function (stream: MediaStream) {
 		const canvasCtx = canvas?.getContext('2d')
@@ -36,14 +36,15 @@
 			playStopSound()
 			isLoading = true
 			const audio = new Blob(chunks, {type: recorder.mimeType})
-			transcript = await groq.transcribe(await audio.arrayBuffer(), $settings.groqApiKey)
+			const rawTranscript = await groq.transcribe(await audio.arrayBuffer(), $settings.groqApiKey)
 
+			let transcript = rawTranscript
 			if (formatWithAi) {
-				transcript = await ai.format(transcript, $settings.openaiApiKey)
+				transcript = await ai.format(transcript, $settings.openaiApiKey, preset)
 			}
 
 			await clipboard.copy(transcript)
-			await fileSystem.saveRecording({audio, transcript})
+			await fileSystem.saveRecording({audio, transcript, raw: rawTranscript})
 
 			isLoading = false
 
@@ -146,12 +147,22 @@
 	{/if}
 	<canvas data-tauri-drag-region class:blur-lg={isLoading} bind:this={canvas}></canvas>
 
-	<div class="absolute right-0 bottom-0 left-0">
+	<div class="absolute bottom-0 left-0 right-0">
 		<button
 			class="rounded-lg bg-blue-500 p-2 text-white"
 			onclick={() => (formatWithAi = !formatWithAi)}
 		>
 			AI: {formatWithAi ? 'On' : 'Off'}
 		</button>
+
+		<label for="preset">
+			Preset
+			<select id="preset" bind:value={preset}>
+				<option value="default">default</option>
+				<option value="message">message</option>
+				<option value="note">note</option>
+				<option value="email">email</option>
+			</select>
+		</label>
 	</div>
 </div>
