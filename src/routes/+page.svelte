@@ -2,7 +2,7 @@
 	import {getAllWebviewWindows} from '@tauri-apps/api/webviewWindow'
 	import {register, unregister} from '@tauri-apps/plugin-global-shortcut'
 	import {onDestroy, onMount} from 'svelte'
-	import {ai} from '$lib/ai'
+	import {ai, type AiModel} from '$lib/ai'
 	import {clipboard} from '$lib/clipboard'
 	import {fileSystem} from '$lib/file-system'
 	import {groq} from '$lib/groq'
@@ -14,6 +14,7 @@
 	let isLoading = $state(false)
 	let formatWithAi = $state(true)
 	let preset: 'default' | 'message' | 'note' | 'email' = $state('default')
+	let aiModel: AiModel = $state('claude35Sonnet')
 
 	let onSuccess = function (stream: MediaStream) {
 		const canvasCtx = canvas?.getContext('2d')
@@ -36,19 +37,31 @@
 			playStopSound()
 			isLoading = true
 			const audio = new Blob(chunks, {type: recorder.mimeType})
-			const rawTranscript = await groq.transcribe(await audio.arrayBuffer(), $settings.groqApiKey)
 
-			let transcript = rawTranscript
-			if (formatWithAi) {
-				transcript = await ai.format(transcript, $settings.openaiApiKey, preset)
+			let transcript = ''
+			let rawTranscript = ''
+
+			try {
+				rawTranscript = await groq.transcribe(await audio.arrayBuffer(), $settings.groqApiKey)
+
+				if (formatWithAi) {
+					transcript = await ai.format({
+						text: rawTranscript,
+						openaiApiKey: $settings.openaiApiKey,
+						anthropicApiKey: $settings.anthropicApiKey,
+						preset,
+						model: aiModel,
+					})
+				}
+				await clipboard.copy(transcript)
+			} catch (error) {
+				console.error(error)
+			} finally {
+				// Always save, even if AI fails. Later also handle file system errors
+				await fileSystem.saveRecording({audio, transcript, raw: rawTranscript})
+				isLoading = false
+				chunks = []
 			}
-
-			await clipboard.copy(transcript)
-			await fileSystem.saveRecording({audio, transcript, raw: rawTranscript})
-
-			isLoading = false
-
-			chunks = []
 		}
 
 		register('Control+Q', async event => {
@@ -147,22 +160,26 @@
 	{/if}
 	<canvas data-tauri-drag-region class:blur-lg={isLoading} bind:this={canvas}></canvas>
 
-	<div class="absolute bottom-0 left-0 right-0">
+	<div class="absolute bottom-0 left-0 right-0 flex justify-evenly text-sm">
 		<button
-			class="rounded-lg bg-blue-500 p-2 text-white"
+			class="rounded-lg bg-gray-500 px-1 text-white"
 			onclick={() => (formatWithAi = !formatWithAi)}
 		>
-			AI: {formatWithAi ? 'On' : 'Off'}
+			{formatWithAi ? 'ai:on' : 'ai:off'}
 		</button>
 
-		<label for="preset">
-			Preset
-			<select id="preset" bind:value={preset}>
-				<option value="default">default</option>
-				<option value="message">message</option>
-				<option value="note">note</option>
-				<option value="email">email</option>
-			</select>
-		</label>
+		<select bind:value={preset}>
+			<option value="default">default</option>
+			<option value="message">message</option>
+			<option value="note">note</option>
+			<option value="email">email</option>
+		</select>
+
+		<select bind:value={aiModel}>
+			<option value="gpt4o">gpt4o</option>
+			<option value="gpt4oMini">gpt4oMini</option>
+			<option value="claude35Sonnet">claude35Sonnet</option>
+			<option value="claude35Haiku">claude35Haiku</option>
+		</select>
 	</div>
 </div>

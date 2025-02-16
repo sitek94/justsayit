@@ -4,6 +4,7 @@ import {writable, derived, type Writable} from 'svelte/store'
 export type Settings = {
 	groqApiKey: string
 	openaiApiKey: string
+	anthropicApiKey: string
 }
 
 const persistentStore = new LazyStore('settings.json')
@@ -35,7 +36,7 @@ internalSettings.subscribe(async value => {
 
 export function hasRequiredSettings(settings: Settings | null): settings is Settings {
 	if (!settings) return false
-	return Boolean(settings.groqApiKey)
+	return Boolean(settings.groqApiKey && settings.openaiApiKey && settings.anthropicApiKey)
 }
 
 // Update functions now work with the internal store

@@ -1,7 +1,11 @@
 <script lang="ts">
 	import {settings, updateSettings, type Settings} from '$lib/settings'
 
-	let currentSettings: Settings = $settings ?? {groqApiKey: '', openaiApiKey: ''}
+	let currentSettings: Settings = $settings ?? {
+		groqApiKey: '',
+		openaiApiKey: '',
+		anthropicApiKey: '',
+	}
 
 	function handleSubmit() {
 		updateSettings(currentSettings)
@@ -33,9 +37,19 @@
 		/>
 	</div>
 
+	<div>
+		<label for="anthropicApiKey" class="mb-2 block text-sm font-medium">Anthropic API Key</label>
+		<input
+			type="text"
+			id="anthropicApiKey"
+			bind:value={currentSettings.anthropicApiKey}
+			class="w-full rounded-lg border border-gray-300 p-2.5"
+		/>
+	</div>
+
 	<button
 		type="submit"
-		class="rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none"
+		class="rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
 	>
 		Save Settings
 	</button>

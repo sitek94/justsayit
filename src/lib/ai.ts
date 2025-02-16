@@ -1,22 +1,61 @@
+import {createAnthropic} from '@ai-sdk/anthropic'
 import {createOpenAI} from '@ai-sdk/openai'
 import {generateText} from 'ai'
+
+export type AiModel = 'gpt4o' | 'gpt4oMini' | 'claude35Sonnet' | 'claude35Haiku'
 
 export const ai = {
 	format,
 }
 
-async function format(
-	text: string,
-	apiKey: string,
-	preset: 'default' | 'message' | 'note' | 'email',
-) {
-	const openai = createOpenAI({apiKey})
+async function format({
+	text,
+	openaiApiKey,
+	anthropicApiKey,
+	preset,
+	model,
+}: {
+	text: string
+	openaiApiKey: string
+	anthropicApiKey: string
+	preset: 'default' | 'message' | 'note' | 'email'
+	model: AiModel
+}) {
 	const response = await generateText({
-		model: openai('gpt-4o-mini-2024-07-18'),
+		model: getModel(model, openaiApiKey, anthropicApiKey),
 		prompt: getPrompt(text, preset),
 	})
 
 	return response.text
+}
+
+/**
+ * Ughhhh refactor incoming
+ */
+function getModel(model: AiModel, openaiApiKey: string, anthropicApiKey: string) {
+	const openai = createOpenAI({apiKey: openaiApiKey})
+	const anthropic = createAnthropic({
+		apiKey: anthropicApiKey,
+		headers: {'anthropic-dangerous-direct-browser-access': 'true'},
+	})
+
+	if (model === 'gpt4o') {
+		return openai('gpt-4o-2024-11-20')
+	}
+
+	if (model === 'gpt4oMini') {
+		return openai('gpt-4o-mini-2024-07-18')
+	}
+
+	if (model === 'claude35Sonnet') {
+		return anthropic('claude-3-5-sonnet-latest')
+	}
+
+	if (model === 'claude35Haiku') {
+		return anthropic('claude-3-5-haiku-latest')
+	}
+
+	throw new Error(`Unknown model: ${model}`)
 }
 
 function getPrompt(userMessage: string, preset: 'default' | 'message' | 'note' | 'email') {

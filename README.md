@@ -15,6 +15,9 @@
 - [x] settings
   - [x] api keys
   - [x] format with AI toggle
+  - [x] formatting preset selection (default, message, note, email)
+    - [ ] maybe this ai toggle is not needed now, one of the presets could be "no formatting"
+  - [x] model selection
   - [x] persist settings
   - [ ] paste text after processing
 - [x] auto update
