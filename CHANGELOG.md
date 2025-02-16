@@ -1,5 +1,12 @@
 # justsayit
 
+## 0.0.18
+
+### Patch Changes
+
+- add language selection
+  ([`6e4749b`](https://github.com/sitek94/justsayit/commit/6e4749ba6c2241a565a49992e2e41122dc3e2c4f))
+
 ## 0.0.17
 
 ### Patch Changes
