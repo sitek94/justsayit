@@ -26,7 +26,15 @@ export const fileSystem = {
 		return appDirPath
 	},
 
-	saveRecording: async ({audio, transcript}: {audio: Blob; transcript: string}) => {
+	saveRecording: async ({
+		audio,
+		transcript,
+		raw,
+	}: {
+		audio: Blob
+		transcript: string
+		raw: string
+	}) => {
 		await fileSystem.ensureAppDirectoriesExist()
 
 		const timestamp = Date.now().toString()
@@ -40,6 +48,9 @@ export const fileSystem = {
 
 		const transcriptPath = await path.join(recordingDirPath, 'transcript.txt')
 		await writeTextFile(transcriptPath, transcript, {baseDir: BASE_DIR})
+
+		const rawPath = await path.join(recordingDirPath, 'raw.txt')
+		await writeTextFile(rawPath, raw, {baseDir: BASE_DIR})
 
 		return recordingDirPath
 	},
