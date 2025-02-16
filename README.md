@@ -18,7 +18,7 @@
   - [x] formatting preset selection (default, message, note, email)
   - [x] model selection
   - [x] persist settings
-  - [ ] language selection
+  - [x] language selection
 - [x] auto update
 - [x] tray icon menu
   - [x] quit
@@ -41,6 +41,11 @@
   - [ ] each config can have: formatting preset, ai model, language
   - [ ] choose one default config
   - [ ] assign shortcut to each config
+- support local models
+
+### v0.3
+
+- webhooks - configure webhook and send transcript to it after processing
 
 ## Recommended IDE Setup
 

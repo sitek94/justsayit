@@ -14,16 +14,18 @@ async function format({
 	anthropicApiKey,
 	preset,
 	model,
+	language,
 }: {
 	text: string
 	openaiApiKey: string
 	anthropicApiKey: string
 	preset: 'default' | 'message' | 'note' | 'email'
 	model: AiModel
+	language: 'en' | 'pl' | 'es'
 }) {
 	const response = await generateText({
 		model: getModel(model, openaiApiKey, anthropicApiKey),
-		prompt: getPrompt(text, preset),
+		prompt: getPrompt(text, preset, language),
 	})
 
 	return response.text
@@ -58,10 +60,18 @@ function getModel(model: AiModel, openaiApiKey: string, anthropicApiKey: string)
 	throw new Error(`Unknown model: ${model}`)
 }
 
-function getPrompt(userMessage: string, preset: 'default' | 'message' | 'note' | 'email') {
+function getPrompt(
+	userMessage: string,
+	preset: 'default' | 'message' | 'note' | 'email',
+	language: 'en' | 'pl' | 'es',
+) {
+	const languageName = {en: 'English', pl: 'Polish', es: 'Spanish'}[language]
+	const languagePrompt = `- User is speaking ${languageName}, always respond in ${languageName}`
+
 	switch (preset) {
 		case 'note':
 			return `<instructions>
+${languagePrompt}
 - Reformat the user message, which will be wrapped in <user_message> tags.
 - Structure it for effective note-taking.
 - Ensure that key points, ideas, or action items are clearly highlighted.
@@ -97,7 +107,7 @@ Now, here is the user's message:
 			return `<instructions>
 Reformat the user message, which will be wrapped in <user_message> tags.
 
-- User is speaking English
+${languagePrompt}
 - Fix grammar, spelling, and punctuation
 - Remove speech artifacts (um, uh, false starts, repetitions)
 - Maintain original tone
@@ -130,6 +140,7 @@ Now, here is the user's message:
 
 		case 'email':
 			return `<instructions>
+${languagePrompt}
 - Reformat the user message, which will be wrapped in <user_message> tags.
 - Structure it for email communication.
 - Include a greeting and a sign-off.
@@ -198,7 +209,7 @@ Now, here is the user's message:
 			return `<instructions>
 Reformat the user message, which will be wrapped in <user_message> tags.
 
-- User is speaking English
+${languagePrompt}
 - Fix grammar, spelling, and punctuation
 - Remove speech artifacts (um, uh, false starts, repetitions)
 - Maintain original tone

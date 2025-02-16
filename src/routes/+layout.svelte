@@ -33,7 +33,7 @@
 							decorations: true,
 							resizable: false,
 							width: 300,
-							height: 350,
+							height: 400,
 							url: '/settings',
 						})
 

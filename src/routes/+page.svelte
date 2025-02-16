@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {getAllWebviewWindows} from '@tauri-apps/api/webviewWindow'
-	import {register, unregister} from '@tauri-apps/plugin-global-shortcut'
+	import {register, unregister, isRegistered} from '@tauri-apps/plugin-global-shortcut'
 	import {onDestroy, onMount} from 'svelte'
 	import {ai, type AiModel} from '$lib/ai'
 	import {clipboard} from '$lib/clipboard'
@@ -13,10 +13,11 @@
 	let audioContext = $state<AudioContext | null>(null)
 	let isLoading = $state(false)
 	let formatWithAi = $state(true)
-	let preset: 'default' | 'message' | 'note' | 'email' = $state('default')
-	let aiModel: AiModel = $state('claude35Sonnet')
+	let preset = $state<'default' | 'message' | 'note' | 'email'>('default')
+	let aiModel = $state<AiModel>('claude35Sonnet')
+	let language = $state<'en' | 'pl' | 'es'>('en')
 
-	let onSuccess = function (stream: MediaStream) {
+	let onSuccess = async function (stream: MediaStream) {
 		const canvasCtx = canvas?.getContext('2d')
 		if (!canvasCtx) return
 
@@ -42,7 +43,11 @@
 			let rawTranscript = ''
 
 			try {
-				rawTranscript = await groq.transcribe(await audio.arrayBuffer(), $settings.groqApiKey)
+				rawTranscript = await groq.transcribe(
+					await audio.arrayBuffer(),
+					$settings.groqApiKey,
+					language,
+				)
 
 				if (formatWithAi) {
 					transcript = await ai.format({
@@ -51,6 +56,7 @@
 						anthropicApiKey: $settings.anthropicApiKey,
 						preset,
 						model: aiModel,
+						language,
 					})
 				}
 				await clipboard.copy(transcript)
@@ -62,6 +68,10 @@
 				isLoading = false
 				chunks = []
 			}
+		}
+
+		if (await isRegistered('Control+Q')) {
+			unregister('Control+Q')
 		}
 
 		register('Control+Q', async event => {
@@ -102,7 +112,7 @@
 		draw()
 
 		function draw() {
-			if (!canvasCtx) return
+			if (!canvas || !canvasCtx) return
 
 			const WIDTH = canvas.width
 			const HEIGHT = canvas.height
@@ -158,9 +168,10 @@
 			<p class="text-white">Loading...</p>
 		</div>
 	{/if}
-	<canvas data-tauri-drag-region class:blur-lg={isLoading} bind:this={canvas}></canvas>
+	<canvas class="w-full" data-tauri-drag-region class:blur-lg={isLoading} bind:this={canvas}
+	></canvas>
 
-	<div class="absolute bottom-0 left-0 right-0 flex justify-evenly text-sm">
+	<div class="fixed bottom-1 left-0 right-0 flex justify-evenly text-sm">
 		<button
 			class="rounded-lg bg-gray-500 px-1 text-white"
 			onclick={() => (formatWithAi = !formatWithAi)}
@@ -180,6 +191,12 @@
 			<option value="gpt4oMini">gpt4oMini</option>
 			<option value="claude35Sonnet">claude35Sonnet</option>
 			<option value="claude35Haiku">claude35Haiku</option>
+		</select>
+
+		<select bind:value={language}>
+			<option value="en">en</option>
+			<option value="pl">pl</option>
+			<option value="es">es</option>
 		</select>
 	</div>
 </div>

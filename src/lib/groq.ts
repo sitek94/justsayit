@@ -4,7 +4,7 @@ export const groq = {
 	transcribe,
 }
 
-async function transcribe(buffer: ArrayBuffer, apiKey: string) {
+async function transcribe(buffer: ArrayBuffer, apiKey: string, language: 'en' | 'pl' | 'es') {
 	const client = new Groq({
 		apiKey,
 		dangerouslyAllowBrowser: true,
@@ -14,6 +14,7 @@ async function transcribe(buffer: ArrayBuffer, apiKey: string) {
 		file: await toFile(buffer, 'audio.wav'),
 		prompt: `User is providing his life metrics, like weight, sleep, steps, etc.`,
 		model: 'whisper-large-v3',
+		language,
 	})
 
 	return transcription.text
