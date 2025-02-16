@@ -7,26 +7,40 @@
 >
 > You’ve been warned. Enter at your own risk.
 
-## v0
+## Roadmap
+
+### v0
 
 - [x] simple audio input
-  - [ ] prevent sending empty messages (no audio)
-  - [ ] cancel recording
 - [x] settings
   - [x] api keys
   - [x] format with AI toggle
   - [x] formatting preset selection (default, message, note, email)
-    - [ ] maybe this ai toggle is not needed now, one of the presets could be "no formatting"
   - [x] model selection
   - [x] persist settings
-  - [ ] paste text after processing
+  - [ ] language selection
 - [x] auto update
 - [x] tray icon menu
   - [x] quit
   - [x] settings
 - [x] history (simple, stored in file system: audio + transcript + llm response)
-  - [ ] maybe tray menu action to open history file dir
+
+### v0.1
+
+- REFACTOR
+
+### v0.2
+
 - [ ] retry mechanism
+- [ ] tray menu action to open history file dir
+- [ ] paste text after processing
+- [ ] maybe this ai toggle is not needed now, one of the presets could be "no formatting"
+- [ ] prevent sending empty messages (no audio)
+- [ ] cancel recording
+- [ ] add configs/presets/modes (need to decide on the name)
+  - [ ] each config can have: formatting preset, ai model, language
+  - [ ] choose one default config
+  - [ ] assign shortcut to each config
 
 ## Recommended IDE Setup
 
