@@ -1,5 +1,17 @@
 # justsayit
 
+## 0.0.17
+
+### Patch Changes
+
+- bump deps ([`eb21b70`](https://github.com/sitek94/justsayit/commit/eb21b70d1b85c7232569b1b663c959e2c663f632))
+
+- - persist raw transcript
+    ([`3d34413`](https://github.com/sitek94/justsayit/commit/3d3441384baa9b7b5c46603cd22009987efa9832))
+  - add ai formatting presets
+  - add model selection
+  - add anthropic model
+
 ## 0.0.16
 
 ### Patch Changes
