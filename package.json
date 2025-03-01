@@ -32,7 +32,8 @@
 		"@types/d3": "^7.4.3",
 		"ai": "^4.1.41",
 		"d3": "^7.9.0",
-		"groq-sdk": "^0.13.0"
+		"groq-sdk": "^0.13.0",
+		"zod": "^3.24.2"
 	},
 	"devDependencies": {
 		"@changesets/cli": "^2.27.12",

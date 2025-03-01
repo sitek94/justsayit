@@ -27,7 +27,7 @@
 
 ### v0.1
 
-- REFACTOR
+- [ ] REFACTOR
 
 ### v0.2
 
