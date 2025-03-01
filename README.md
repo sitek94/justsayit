@@ -47,6 +47,67 @@
 
 - webhooks - configure webhook and send transcript to it after processing
 
+## Frontend Structure
+
+```plaintext
+src/
+├── app.html
+├── app.d.ts
+├── routes/
+│   ├── +layout.svelte
+│   ├── +layout.ts
+│   ├── +page.svelte
+│   └── settings/
+│       └── +page.svelte
+├── lib/
+│   ├── core/
+│   │   ├── types.ts                  # Shared type definitions
+│   │   ├── constants.ts              # App-wide constants
+│   │   └── store.ts                  # Core app state management
+│   ├── features/
+│   │   ├── audio/
+│   │   │   ├── audio-recorder.ts     # Audio recording logic
+│   │   │   ├── audio-visualizer.ts   # Visualization logic
+│   │   │   ├── visualizer.svelte     # Visualization component
+│   │   │   └── sounds/               # Audio files
+│   │   ├── transcription/
+│   │   │   ├── transcription.ts      # Transcription service
+│   │   │   └── providers/
+│   │   │       └── groq.ts           # Groq integration
+│   │   ├── ai-formatting/
+│   │   │   ├── formatting.ts         # Formatting service
+│   │   │   ├── presets/              # Formatting presets
+│   │   │   │   ├── default.ts
+│   │   │   │   ├── message.ts
+│   │   │   │   ├── note.ts
+│   │   │   │   └── email.ts
+│   │   │   └── providers/            # AI providers
+│   │   │       ├── openai.ts
+│   │   │       └── anthropic.ts
+│   │   ├── shortcuts/
+│   │   │   ├── shortcut-manager.ts   # Keyboard shortcut handling
+│   │   │   └── presets.ts            # Preset configurations
+│   │   ├── storage/
+│   │   │   ├── file-system.ts        # File system operations
+│   │   │   ├── settings.ts           # Settings management
+│   │   │   └── settings.svelte       # Settings UI component
+│   │   └── system/
+│   │       ├── clipboard.ts          # Clipboard operations
+│   │       └── tray.ts               # System tray functionality
+│   ├── ui/
+│   │   ├── components/               # Reusable UI components
+│   │   │   ├── button.svelte
+│   │   │   ├── select.svelte
+│   │   │   └── loading.svelte
+│   │   └── styles/
+│   │       └── global.css            # Global styles
+│   └── utils/                        # Utility functions
+│       ├── audio-utils.ts
+│       └── format-utils.ts
+└── assets/                           # Static assets
+    └── icons/
+```
+
 ## Recommended IDE Setup
 
 - [VS Code](https://code.visualstudio.com/) +
