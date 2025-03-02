@@ -1,4 +1,4 @@
-import {WebviewWindow} from '@tauri-apps/api/webviewWindow'
+import {getAllWebviewWindows, WebviewWindow} from '@tauri-apps/api/webviewWindow'
 
 export async function openSettingsWindow() {
 	const webview = new WebviewWindow('settings', {
@@ -16,4 +16,11 @@ export async function openSettingsWindow() {
 	webview.once('tauri://error', e => {
 		console.error(e)
 	})
+}
+
+export async function bringMainWindowToFront() {
+	// `app.show() steals the focus`
+	// probably I could just get a webview by its label, just experimenting for now
+	const [webview] = await getAllWebviewWindows()
+	await webview.show()
 }

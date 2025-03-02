@@ -1,5 +1,4 @@
 <script lang="ts">
-	import {getAllWebviewWindows} from '@tauri-apps/api/webviewWindow'
 	import {register, unregister} from '@tauri-apps/plugin-global-shortcut'
 	import {onDestroy, onMount} from 'svelte'
 	import type {Language} from '$lib/core/types'
@@ -9,6 +8,7 @@
 	import {clipboard} from '$lib/services/clipboard'
 	import {fileSystem} from '$lib/services/file-system'
 	import {transcription} from '$lib/services/transcription'
+	import {bringMainWindowToFront} from '$lib/services/windows'
 	import Visualizer from '$lib/visualizer.svelte'
 
 	let isLoading = $state(false)
@@ -27,10 +27,7 @@
 					mediaStream = null
 					recorder = null
 				} else {
-					// `app.show() steals the focus`
-					// probably I could just get a webview by its label, just experimenting for now
-					const [webview] = await getAllWebviewWindows()
-					await webview.show()
+					await bringMainWindowToFront()
 
 					mediaStream = await navigator.mediaDevices.getUserMedia({audio: true})
 
