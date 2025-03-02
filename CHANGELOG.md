@@ -1,5 +1,12 @@
 # justsayit
 
+## 0.1.1
+
+### Patch Changes
+
+- bring app to front and hide it on shortcut
+  ([`bd988a9`](https://github.com/sitek94/justsayit/commit/bd988a9a7211538733af9628ef0091f78aa08925))
+
 ## 0.1.0
 
 ### Minor Changes
