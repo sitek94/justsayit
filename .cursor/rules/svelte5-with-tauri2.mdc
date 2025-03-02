@@ -23,13 +23,6 @@ Naming Conventions
 - Use PascalCase for component names in imports and usage.
 - Use camelCase for variables, functions, and props.
 
-TypeScript Usage
-- Use TypeScript for all code; prefer types over interfaces
-- Rely on TypeScript inference as much as possible, avoid explicit type annotations unless necessary
-- Avoid enums; use const objects instead
-- Use functional components with TypeScript types for props.
-- Enable strict mode in TypeScript for better type safety.
-
 Svelte Runes
 - `$state`: Declare reactive state
   ```typescript
@@ -69,7 +62,6 @@ SvelteKit Project Structure
   - svelte.config.js
   - vite.config.js
   ```
-
 Component Development
 - Create .svelte files for Svelte components.
 - Use .svelte.ts files for component logic and state machines.
@@ -105,5 +97,16 @@ To add plugins use:
 bun tauri add <plugin>
 ```
 </important_notes>
+
+Formatting:
+
+TypeScript Usage
+- Use TypeScript for all code
+- Rely on TypeScript inference as much as possible, avoid explicit type annotations unless necessary
+- Avoid enums; use const objects instead
+- Use functional components with TypeScript types for props.
+- Enable strict mode in TypeScript for better type safety.
+- Prefer types over interfaces
+- Avoid explicitly typing function return types, rely on inference instead
 
 

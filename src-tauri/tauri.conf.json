@@ -16,7 +16,8 @@
         "decorations": false,
         "resizable": false,
         "width": 350,
-        "height": 150
+        "height": 150,
+        "url": "/app"
       }
       
     ],

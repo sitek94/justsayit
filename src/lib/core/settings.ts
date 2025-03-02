@@ -4,9 +4,9 @@ import {z} from 'zod'
 
 export const SettingsSchema = z.object({
 	apiKeys: z.object({
-		groq: z.string(),
-		openai: z.string(),
-		anthropic: z.string(),
+		groq: z.string().nonempty(),
+		openai: z.string().nonempty(),
+		anthropic: z.string().nonempty(),
 	}),
 })
 
@@ -14,7 +14,7 @@ export type Settings = z.infer<typeof SettingsSchema>
 
 const persistentStore = new LazyStore('settings.json')
 
-const settings: Writable<Settings | null> = writable(null)
+export const settings: Writable<Settings | null> = writable(null)
 
 export async function initializeSettings() {
 	const storedSettings = await persistentStore.get<Settings>('settings')
@@ -42,4 +42,8 @@ export function requireApiKey(key: keyof Settings['apiKeys']) {
 	const apiKeys = requireApiKeys()
 	if (!apiKeys[key]) throw new Error(`API key ${key} not initialized`)
 	return apiKeys[key]
+}
+
+export function hasRequiredSettings(settings: Settings | null) {
+	return SettingsSchema.safeParse(settings).success
 }
