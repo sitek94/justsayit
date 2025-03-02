@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {getAllWebviewWindows} from '@tauri-apps/api/webviewWindow'
-	import {isRegistered, register, unregister} from '@tauri-apps/plugin-global-shortcut'
+	import {register, unregister} from '@tauri-apps/plugin-global-shortcut'
 	import {onDestroy, onMount} from 'svelte'
 	import type {Language} from '$lib/core/types'
 	import {aiFormatting, type PresetName} from '$lib/features/ai-formatting'
@@ -9,143 +9,77 @@
 	import {clipboard} from '$lib/services/clipboard'
 	import {fileSystem} from '$lib/services/file-system'
 	import {transcription} from '$lib/services/transcription'
+	import Visualizer from '$lib/visualizer.svelte'
 
-	let canvas: HTMLCanvasElement
-	let audioContext = $state<AudioContext | null>(null)
 	let isLoading = $state(false)
-	let formatWithAi = $state(true)
+	let formatWithAi = $state(false)
 	let preset = $state<PresetName>('default')
 	let aiModel = $state<ModelName>('claude35Sonnet')
 	let language = $state<Language>('en')
+	let mediaStream = $state<MediaStream | null>(null)
+	let recorder = $state<MediaRecorder | null>(null)
 
-	let onSuccess = async function (stream: MediaStream) {
-		const canvasCtx = canvas?.getContext('2d')
-		if (!canvasCtx) return
-
-		let chunks: Blob[] = []
-		const recorder = new MediaRecorder(stream)
-
-		visualize(stream, canvasCtx)
-
-		recorder.ondataavailable = function (e) {
-			chunks.push(e.data)
-		}
-
-		recorder.onstart = () => {
-			playStartSound()
-		}
-
-		recorder.onstop = async () => {
-			playStopSound()
-			isLoading = true
-			const audio = new Blob(chunks, {type: recorder.mimeType})
-
-			let transcript = ''
-			let rawTranscript = ''
-
-			try {
-				const buffer = await audio.arrayBuffer()
-				rawTranscript = await transcription.transcribe(buffer, language)
-
-				if (formatWithAi) {
-					transcript = await aiFormatting.format({
-						text: rawTranscript,
-						presetName: preset,
-					})
-				}
-				await clipboard.copy(transcript)
-			} catch (error) {
-				console.error(error)
-			} finally {
-				// Always save, even if AI fails. Later also handle file system errors
-				await fileSystem.saveRecording({audio, transcript, raw: rawTranscript})
-				isLoading = false
-				chunks = []
-			}
-		}
-
-		if (await isRegistered('Control+Q')) {
-			unregister('Control+Q')
-		}
-
+	onMount(() => {
 		register('Control+Q', async event => {
-			if (event.state === 'Pressed') {
-				if (recorder.state === 'recording') {
+			if (event.state === 'Released') {
+				if (recorder?.state === 'recording') {
 					recorder.stop()
+					mediaStream = null
+					recorder = null
 				} else {
 					// `app.show() steals the focus`
 					// probably I could just get a webview by its label, just experimenting for now
 					const [webview] = await getAllWebviewWindows()
+					await webview.show()
 
-					webview.show()
+					mediaStream = await navigator.mediaDevices.getUserMedia({audio: true})
+
+					let chunks: Blob[] = []
+					recorder = new MediaRecorder(mediaStream)
+
+					recorder.ondataavailable = function (e) {
+						chunks.push(e.data)
+					}
+
+					recorder.onstart = () => {
+						playStartSound()
+					}
+
+					recorder.onstop = async () => {
+						playStopSound()
+						isLoading = true
+						const audio = new Blob(chunks, {type: recorder?.mimeType})
+
+						let transcript = ''
+						let rawTranscript = ''
+
+						try {
+							const buffer = await audio.arrayBuffer()
+							rawTranscript = await transcription.transcribe(buffer, language)
+
+							console.log(rawTranscript)
+
+							if (formatWithAi) {
+								transcript = await aiFormatting.format({
+									text: rawTranscript,
+									presetName: preset,
+								})
+							}
+							await clipboard.copy(transcript || rawTranscript)
+						} catch (error) {
+							console.error(error)
+						} finally {
+							// Always save, even if AI fails. Later also handle file system errors
+							await fileSystem.saveRecording({audio, transcript, raw: rawTranscript})
+							isLoading = false
+							chunks = []
+						}
+					}
 
 					recorder.start()
 				}
 			}
 		})
-	}
-
-	let onError = function (err: unknown) {
-		console.log('The following error occured: ' + err)
-	}
-
-	function visualize(stream: MediaStream, canvasCtx: CanvasRenderingContext2D) {
-		if (!audioContext) {
-			audioContext = new AudioContext()
-		}
-
-		const source = audioContext.createMediaStreamSource(stream)
-
-		const bufferLength = 2048
-		const analyser = audioContext.createAnalyser()
-		analyser.fftSize = bufferLength
-		const dataArray = new Uint8Array(bufferLength)
-
-		source.connect(analyser)
-
-		draw()
-
-		function draw() {
-			if (!canvas || !canvasCtx) return
-
-			const WIDTH = canvas.width
-			const HEIGHT = canvas.height
-
-			requestAnimationFrame(draw)
-
-			analyser.getByteTimeDomainData(dataArray)
-
-			canvasCtx.fillStyle = '#ccc'
-			canvasCtx.fillRect(0, 0, WIDTH, HEIGHT)
-
-			canvasCtx.lineWidth = 2
-			canvasCtx.strokeStyle = 'rgb(0, 0, 0)'
-
-			canvasCtx.beginPath()
-
-			let sliceWidth = (WIDTH * 1.0) / bufferLength
-			let x = 0
-
-			for (let i = 0; i < bufferLength; i++) {
-				let v = dataArray[i] / 128.0
-				let y = (v * HEIGHT) / 2
-
-				if (i === 0) {
-					canvasCtx.moveTo(x, y)
-				} else {
-					canvasCtx.lineTo(x, y)
-				}
-
-				x += sliceWidth
-			}
-
-			canvasCtx.lineTo(canvas.width, canvas.height / 2)
-			canvasCtx.stroke()
-		}
-	}
-
-	onMount(() => {
-		navigator.mediaDevices.getUserMedia({audio: true}).then(onSuccess, onError)
 	})
 
 	onDestroy(() => {
@@ -162,12 +96,9 @@
 			<p class="text-white">Loading...</p>
 		</div>
 	{/if}
-	<canvas
-		class="h-[130px] w-full"
-		data-tauri-drag-region
-		class:blur-lg={isLoading}
-		bind:this={canvas}
-	></canvas>
+	{#if mediaStream}
+		<Visualizer stream={mediaStream} />
+	{/if}
 
 	<div class="flex justify-evenly bg-[#ccc] text-sm">
 		<button
