@@ -4,12 +4,12 @@
 	import type {Language} from '$lib/core/types'
 	import {aiFormatting, type PresetName} from '$lib/features/ai-formatting'
 	import {createRecorder} from '$lib/features/audio/recoder.svelte'
+	import Visualizer from '$lib/features/audio/visualizer.svelte'
 	import type {ModelName} from '$lib/services/ai'
 	import {clipboard} from '$lib/services/clipboard'
 	import {fileSystem} from '$lib/services/file-system'
 	import {playStartSound, playStopSound} from '$lib/services/play-sound'
 	import {transcription} from '$lib/services/transcription'
-	import Visualizer from '$lib/visualizer.svelte'
 
 	let isProcessing = $state(false)
 	let formatWithAi = $state(false)

@@ -28,7 +28,10 @@
 {:else if !hasRequiredSettings($settings)}
 	<div class="container mx-auto p-4">
 		<p class="mb-4">Please configure the required settings to continue.</p>
-		<button onclick={openSettingsWindow}>Open Settings</button>
+		<button
+			class="rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none"
+			onclick={openSettingsWindow}>Open Settings</button
+		>
 	</div>
 {:else}
 	{@render children()}
