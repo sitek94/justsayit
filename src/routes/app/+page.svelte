@@ -3,77 +3,63 @@
 	import {onDestroy, onMount} from 'svelte'
 	import type {Language} from '$lib/core/types'
 	import {aiFormatting, type PresetName} from '$lib/features/ai-formatting'
+	import {createRecorder} from '$lib/features/audio/recoder.svelte'
 	import type {ModelName} from '$lib/services/ai'
-	import {playStartSound, playStopSound} from '$lib/services/audio/play-sound'
 	import {clipboard} from '$lib/services/clipboard'
 	import {fileSystem} from '$lib/services/file-system'
+	import {playStartSound, playStopSound} from '$lib/services/play-sound'
 	import {transcription} from '$lib/services/transcription'
-	import {bringMainWindowToFront} from '$lib/services/windows'
 	import Visualizer from '$lib/visualizer.svelte'
 
-	let isLoading = $state(false)
+	let isProcessing = $state(false)
 	let formatWithAi = $state(false)
 	let preset = $state<PresetName>('default')
 	let aiModel = $state<ModelName>('claude35Sonnet')
 	let language = $state<Language>('en')
-	let mediaStream = $state<MediaStream | null>(null)
-	let recorder = $state<MediaRecorder | null>(null)
+
+	const recorder = createRecorder({
+		onStart: () => {
+			playStartSound()
+		},
+		onStop: async audio => {
+			playStopSound()
+			await processAudio(audio)
+		},
+	})
+
+	async function processAudio(audio: Blob) {
+		const buffer = await audio.arrayBuffer()
+		try {
+			isProcessing = true
+			const transcript = await transcription.transcribe(buffer, language)
+			const formattedTranscript = await formatTranscript(transcript)
+			await clipboard.copy(formattedTranscript)
+			await fileSystem.saveRecording({audio, transcript: formattedTranscript, raw: transcript})
+		} catch (error) {
+			console.error(error)
+		} finally {
+			isProcessing = false
+		}
+	}
+
+	async function formatTranscript(transcript: string) {
+		if (formatWithAi) {
+			return await aiFormatting.format({
+				text: transcript,
+				presetName: preset,
+			})
+		}
+
+		return transcript
+	}
 
 	onMount(() => {
 		register('Control+Q', async event => {
 			if (event.state === 'Released') {
-				if (recorder?.state === 'recording') {
-					recorder.stop()
-					mediaStream = null
-					recorder = null
+				if (recorder.isRecording) {
+					await recorder.stopRecording()
 				} else {
-					await bringMainWindowToFront()
-
-					mediaStream = await navigator.mediaDevices.getUserMedia({audio: true})
-
-					let chunks: Blob[] = []
-					recorder = new MediaRecorder(mediaStream)
-
-					recorder.ondataavailable = function (e) {
-						chunks.push(e.data)
-					}
-
-					recorder.onstart = () => {
-						playStartSound()
-					}
-
-					recorder.onstop = async () => {
-						playStopSound()
-						isLoading = true
-						const audio = new Blob(chunks, {type: recorder?.mimeType})
-
-						let transcript = ''
-						let rawTranscript = ''
-
-						try {
-							const buffer = await audio.arrayBuffer()
-							rawTranscript = await transcription.transcribe(buffer, language)
-
-							console.log(rawTranscript)
-
-							if (formatWithAi) {
-								transcript = await aiFormatting.format({
-									text: rawTranscript,
-									presetName: preset,
-								})
-							}
-							await clipboard.copy(transcript || rawTranscript)
-						} catch (error) {
-							console.error(error)
-						} finally {
-							// Always save, even if AI fails. Later also handle file system errors
-							await fileSystem.saveRecording({audio, transcript, raw: rawTranscript})
-							isLoading = false
-							chunks = []
-						}
-					}
-
-					recorder.start()
+					await recorder.startRecording()
 				}
 			}
 		})
@@ -85,16 +71,16 @@
 </script>
 
 <div class="relative flex flex-col">
-	{#if isLoading}
+	{#if isProcessing}
 		<div
 			data-tauri-drag-region
 			class="absolute inset-0 z-10 flex items-center justify-center bg-black/75"
 		>
-			<p class="text-white">Loading...</p>
+			<p class="text-white">Processing...</p>
 		</div>
 	{/if}
-	{#if mediaStream}
-		<Visualizer stream={mediaStream} />
+	{#if recorder.mediaStream}
+		<Visualizer stream={recorder.mediaStream} />
 	{/if}
 
 	<div class="flex justify-evenly bg-[#ccc] text-sm">
