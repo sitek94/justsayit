@@ -34,12 +34,20 @@
     "fs:allow-app-write",
     {
       "identifier": "fs:scope",
-      "allow": [{"path": "$DOCUMENT/**/*"}]
+      "allow": [
+        {
+          "path": "$DOCUMENT/**/*"
+        }
+      ]
     },
     "global-shortcut:allow-is-registered",
     "global-shortcut:allow-register",
     "global-shortcut:allow-unregister",
     "global-shortcut:default",
+    {
+      "identifier": "http:default",
+      "allow": [{ "url": "http://localhost:4490" }]
+    },
     "opener:default",
     "process:default",
     "store:allow-load",

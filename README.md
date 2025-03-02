@@ -1,9 +1,10 @@
-# Tauri + Svelte + Typescript
+# justsayit
+
+Inspired by [superwhisper](https://superwhisper.com/), definitely check it out if you're looking for something stable, polished and feature rich.
 
 > [!WARNING]
 >
-> This code is **a mess**. It's a PoC where I'm constantly experimenting, changing things, and publishing everything as
-> I go to test the app in action.
+> This code is **a mess**. It's a PoC where I'm constantly experimenting, changing things, and publishing everything as I go to test the app in action.
 >
 > You've been warned. Enter at your own risk.
 
@@ -33,7 +34,8 @@
 
 - [ ] retry mechanism
 - [ ] tray menu action to open history file dir
-- [ ] paste text after processing
+- [x] paste text after processing
+  - [ ] add config to disable pasting
 - [ ] maybe this ai toggle is not needed now, one of the presets could be "no formatting"
 - [ ] prevent sending empty messages (no audio)
 - [ ] cancel recording
@@ -105,11 +107,31 @@ src/
 - **Feature-Service Separation**: Features contain business logic while services handle external interactions
 - **No Circular Dependencies**: Services are designed to avoid importing from one another
 
-## Recommended IDE Setup
+## Workarounds
 
-- [VS Code](https://code.visualstudio.com/) +
-  [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) +
-  [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+### Pasting text at cursor
+
+I wanted my app to work like [superwhisper](https://superwhisper.com/) - when you stop recording, the text should automatically appear where your cursor is. The app should copy the text to your clipboard AND paste it for you right away.
+
+The problem is that Tauri (what I'm using to build this app) can't control your cursor to paste text.
+
+My solution:
+
+1. Use [Keyboard Maestro](https://www.keyboardmaestro.com/) as a helper
+2. Set up Keyboard Maestro's web server
+3. Create a macro with a web trigger that pastes clipboard content
+4. Make my app send a request to this local web server when needed
+
+To set this up yourself:
+
+- Install Keyboard Maestro
+- Turn on its web server feature
+- Create a macro with a public web trigger (helpful video: https://www.youtube.com/watch?v=D0IqJt-H9xE)
+- Connect from Tauri using the HTTP client plugin (docs: https://tauri.app/plugin/http-client/#usage)
+
+Here's what my macro looks like:
+
+![Keyboard Maestro macro to paste text](./docs/keyboard-maestro-paste-copied-text.png)
 
 ## Resources
 

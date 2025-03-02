@@ -20,7 +20,6 @@ export async function openSettingsWindow() {
 
 export async function bringMainWindowToFront() {
 	// `app.show() steals the focus`
-	// probably I could just get a webview by its label, just experimenting for now
 	const mainWindow = await getWindowByLabel('main')
 	await mainWindow?.show()
 }

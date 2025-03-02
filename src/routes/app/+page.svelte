@@ -8,10 +8,10 @@
 	import type {ModelName} from '$lib/services/ai'
 	import {clipboard} from '$lib/services/clipboard'
 	import {fileSystem} from '$lib/services/file-system'
+	import {keyboardMaestro} from '$lib/services/keyboard-maestro'
 	import {playStartSound, playStopSound} from '$lib/services/play-sound'
 	import {transcription} from '$lib/services/transcription'
 	import {bringMainWindowToFront, hideMainWindow} from '$lib/services/windows'
-
 	let isProcessing = $state(false)
 	let formatWithAi = $state(false)
 	let preset = $state<PresetName>('default')
@@ -38,7 +38,10 @@
 			isProcessing = true
 			const transcript = await transcription.transcribe(buffer, language)
 			const formattedTranscript = await formatTranscript(transcript)
+
+			// Some room for performance improvements here
 			await clipboard.copy(formattedTranscript)
+			await keyboardMaestro.pasteTextFromClipboard()
 			await fileSystem.saveRecording({audio, transcript: formattedTranscript, raw: transcript})
 		} catch (error) {
 			console.error(error)
@@ -58,7 +61,7 @@
 		return transcript
 	}
 
-	onMount(() => {
+	onMount(async () => {
 		register('Control+Q', async event => {
 			if (event.state === 'Released') {
 				if (recorder.isRecording) {
