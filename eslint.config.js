@@ -11,7 +11,7 @@ export default tseslint.config(
 	eslint.configs.recommended,
 	tseslint.configs.recommended,
 	eslintPluginSvelte.configs['flat/recommended'],
-	{ignores: ['node_modules', 'build', 'src-tauri', '.svelte-kit']},
+	{ignores: ['node_modules', 'build', 'src-tauri', '.svelte-kit', 'src/lib/_drafts/**/*']},
 	{languageOptions: {globals: globals.browser}},
 	{
 		files: ['**/*.svelte'],

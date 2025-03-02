@@ -41,11 +41,11 @@
   - [ ] each config can have: formatting preset, ai model, language
   - [ ] choose one default config
   - [ ] assign shortcut to each config
-- support local models
+- [ ] support local models
 
 ### v0.3
 
-- webhooks - configure webhook and send transcript to it after processing
+- [ ] webhooks - configure webhook and send transcript to it after processing
 
 ## Frontend Structure
 

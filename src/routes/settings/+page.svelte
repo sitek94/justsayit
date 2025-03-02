@@ -1,6 +1,5 @@
 <script lang="ts">
-	import {settings, updateSettings} from '$lib/core/settings'
-	import type {Settings} from '$lib/core/types'
+	import {settings, updateSettings, type Settings} from '$lib/core/settings'
 
 	let currentSettings: Settings = $settings ?? {
 		apiKeys: {
