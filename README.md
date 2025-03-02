@@ -1,11 +1,11 @@
-# Tauri + React + Typescript
+# Tauri + Svelte + Typescript
 
 > [!WARNING]
 >
-> This code is **a mess**. It’s a PoC where I'm constantly experimenting, changing things, and publishing everything as
+> This code is **a mess**. It's a PoC where I'm constantly experimenting, changing things, and publishing everything as
 > I go to test the app in action.
 >
-> You’ve been warned. Enter at your own risk.
+> You've been warned. Enter at your own risk.
 
 ## Roadmap
 
@@ -27,7 +27,7 @@
 
 ### v0.1
 
-- [ ] REFACTOR
+- [x] REFACTOR
 
 ### v0.2
 
@@ -49,64 +49,61 @@
 
 ## Frontend Structure
 
+The application follows a modular architecture with a clear separation between features and services:
+
+- **Features**: Contain business logic and UI components for specific application features
+- **Services**: Handle API interactions (Tauri, OpenAI, Grok, etc.) and provide a clean interface for features
+
 ```plaintext
 src/
 ├── app.html
 ├── app.d.ts
 ├── routes/
-│   ├── +layout.svelte
 │   ├── +layout.ts
-│   ├── +page.svelte
-│   └── settings/
-│       └── +page.svelte
+│   ├── app/                         # Main app window
+│   │   └── +layout.svelte
+│   └── settings/                    # Settings window
 ├── lib/
-│   ├── core/
-│   │   ├── types.ts                  # Shared type definitions
-│   │   ├── constants.ts              # App-wide constants
-│   │   └── store.ts                  # Core app state management
-│   ├── features/
-│   │   ├── audio/
-│   │   │   ├── audio-recorder.ts     # Audio recording logic
-│   │   │   ├── audio-visualizer.ts   # Visualization logic
-│   │   │   ├── visualizer.svelte     # Visualization component
-│   │   │   └── sounds/               # Audio files
+│   ├── core/                        # Core functionalities
+│   │   ├── types.ts
+│   │   ├── constants.ts
+│   │   ├── settings.ts
+│   │   └── store.ts
+│   ├── services/                    # Service layer for API interactions
+│   │   ├── file-system.ts
+│   │   ├── windows.ts
+│   │   ├── clipboard.ts
+│   │   ├── play-sound.ts
 │   │   ├── transcription/
-│   │   │   ├── transcription.ts      # Transcription service
-│   │   │   └── providers/
-│   │   │       └── groq.ts           # Groq integration
-│   │   ├── ai-formatting/
-│   │   │   ├── formatting.ts         # Formatting service
-│   │   │   ├── presets/              # Formatting presets
-│   │   │   │   ├── default.ts
-│   │   │   │   ├── message.ts
-│   │   │   │   ├── note.ts
-│   │   │   │   └── email.ts
-│   │   │   └── providers/            # AI providers
-│   │   │       ├── openai.ts
-│   │   │       └── anthropic.ts
-│   │   ├── shortcuts/
-│   │   │   ├── shortcut-manager.ts   # Keyboard shortcut handling
-│   │   │   └── presets.ts            # Preset configurations
-│   │   ├── storage/
-│   │   │   ├── file-system.ts        # File system operations
-│   │   │   ├── settings.ts           # Settings management
-│   │   │   └── settings.svelte       # Settings UI component
-│   │   └── system/
-│   │       ├── clipboard.ts          # Clipboard operations
-│   │       └── tray.ts               # System tray functionality
-│   ├── ui/
-│   │   ├── components/               # Reusable UI components
-│   │   │   ├── button.svelte
-│   │   │   ├── select.svelte
-│   │   │   └── loading.svelte
-│   │   └── styles/
-│   │       └── global.css            # Global styles
-│   └── utils/                        # Utility functions
-│       ├── audio-utils.ts
-│       └── format-utils.ts
-└── assets/                           # Static assets
-    └── icons/
+│   │   │   ├── index.ts
+│   │   │   └── providers.ts         # Transcription providers (Grok, ...)
+│   │   └── ai/
+│   │       ├── index.ts
+│   │       └── providers.ts         # AI providers (OpenAI, Anthropic, etc.)
+│   ├── features/
+│   │   ├── audio/                   # Audio recording and visualization
+│   │   │   ├── recorder.svelte.ts
+│   │   │   └── visualizer.svelte
+│   │   ├── ai-formatting/           # AI text formatting
+│   │   │   ├── formatting.ts
+│   │   │   ├── presets.ts
+│   │   │   └── prompts/
+│   │   ├── app-updates.ts           # Automatic application updates
+│   │   └── system-tray.ts           # System tray
+│   ├── assets/
+│   │   ├── sounds/
+│   │   └── icons/
+│   ├── global.css
+│   └── ui/                          # (Future) Reusable UI components
+│       └── components/              # (Future) UI component library
 ```
+
+### Architectural Notes
+
+- **Services Layer**: Introduced to handle API interactions and provide a clean interface for features
+- **API Key Management**: API keys are stored in the central store and accessed directly by services for simplicity
+- **Feature-Service Separation**: Features contain business logic while services handle external interactions
+- **No Circular Dependencies**: Services are designed to avoid importing from one another
 
 ## Recommended IDE Setup
 
