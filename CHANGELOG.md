@@ -1,5 +1,11 @@
 # justsayit
 
+## 0.1.0
+
+### Minor Changes
+
+- refactor! ([`0ada4d9`](https://github.com/sitek94/justsayit/commit/0ada4d9bd73e8fdd0c62aaec4d55575243a64b0e))
+
 ## 0.0.18
 
 ### Patch Changes
