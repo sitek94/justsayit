@@ -1,5 +1,5 @@
-import start from './sounds/start.m4a'
-import stop from './sounds/stop.m4a'
+import start from '$lib/assets/sounds/start.m4a'
+import stop from '$lib/assets/sounds/stop.m4a'
 
 export async function playStartSound() {
 	const audio = new Audio(start)
