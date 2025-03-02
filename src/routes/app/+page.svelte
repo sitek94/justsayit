@@ -10,6 +10,7 @@
 	import {fileSystem} from '$lib/services/file-system'
 	import {playStartSound, playStopSound} from '$lib/services/play-sound'
 	import {transcription} from '$lib/services/transcription'
+	import {bringMainWindowToFront, hideMainWindow} from '$lib/services/windows'
 
 	let isProcessing = $state(false)
 	let formatWithAi = $state(false)
@@ -18,12 +19,16 @@
 	let language = $state<Language>('en')
 
 	const recorder = createRecorder({
-		onStart: () => {
+		onBeforeStart: async () => {
+			await bringMainWindowToFront()
+		},
+		onStart: async () => {
 			playStartSound()
 		},
 		onStop: async audio => {
 			playStopSound()
 			await processAudio(audio)
+			await hideMainWindow()
 		},
 	})
 

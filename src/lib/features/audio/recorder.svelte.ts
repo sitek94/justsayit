@@ -1,14 +1,18 @@
 export function createRecorder({
+	onBeforeStart,
 	onStart,
 	onStop,
 }: {
-	onStart: () => void
+	onBeforeStart: () => Promise<void>
+	onStart: () => Promise<void>
 	onStop: (audio: Blob) => Promise<void>
 }) {
 	let mediaStream = $state<MediaStream | null>(null)
 	let recorder = $state<MediaRecorder | null>(null)
 
 	async function startRecording() {
+		await onBeforeStart()
+
 		mediaStream = await navigator.mediaDevices.getUserMedia({audio: true})
 		recorder = new MediaRecorder(mediaStream)
 
@@ -18,8 +22,8 @@ export function createRecorder({
 			chunks.push(e.data)
 		}
 
-		recorder.onstart = () => {
-			onStart()
+		recorder.onstart = async () => {
+			await onStart()
 		}
 
 		recorder.onstop = async () => {
