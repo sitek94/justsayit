@@ -1,21 +1,22 @@
 <script lang="ts">
 	import {getAllWebviewWindows} from '@tauri-apps/api/webviewWindow'
-	import {register, unregister, isRegistered} from '@tauri-apps/plugin-global-shortcut'
+	import {isRegistered, register, unregister} from '@tauri-apps/plugin-global-shortcut'
 	import {onDestroy, onMount} from 'svelte'
-	import {ai, type AiModel} from '$lib/ai'
-	import {clipboard} from '$lib/clipboard'
-	import {fileSystem} from '$lib/file-system'
-	import {groq} from '$lib/groq'
-	import {playStartSound, playStopSound} from '$lib/play-sound'
-	import {settings} from '$lib/settings'
+	import type {Language} from '$lib/core/types'
+	import {aiFormatting, type PresetName} from '$lib/features/ai-formatting'
+	import type {ModelName} from '$lib/services/ai'
+	import {playStartSound, playStopSound} from '$lib/services/audio/play-sound'
+	import {clipboard} from '$lib/services/clipboard'
+	import {fileSystem} from '$lib/services/file-system'
+	import {transcription} from '$lib/services/transcription'
 
 	let canvas: HTMLCanvasElement
 	let audioContext = $state<AudioContext | null>(null)
 	let isLoading = $state(false)
 	let formatWithAi = $state(true)
-	let preset = $state<'default' | 'message' | 'note' | 'email'>('default')
-	let aiModel = $state<AiModel>('claude35Sonnet')
-	let language = $state<'en' | 'pl' | 'es'>('en')
+	let preset = $state<PresetName>('default')
+	let aiModel = $state<ModelName>('claude35Sonnet')
+	let language = $state<Language>('en')
 
 	let onSuccess = async function (stream: MediaStream) {
 		const canvasCtx = canvas?.getContext('2d')
@@ -43,20 +44,13 @@
 			let rawTranscript = ''
 
 			try {
-				rawTranscript = await groq.transcribe(
-					await audio.arrayBuffer(),
-					$settings.groqApiKey,
-					language,
-				)
+				const buffer = await audio.arrayBuffer()
+				rawTranscript = await transcription.transcribe(buffer, language)
 
 				if (formatWithAi) {
-					transcript = await ai.format({
+					transcript = await aiFormatting.format({
 						text: rawTranscript,
-						openaiApiKey: $settings.openaiApiKey,
-						anthropicApiKey: $settings.anthropicApiKey,
-						preset,
-						model: aiModel,
-						language,
+						presetName: preset,
 					})
 				}
 				await clipboard.copy(transcript)

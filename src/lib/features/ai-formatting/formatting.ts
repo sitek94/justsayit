@@ -8,6 +8,7 @@ export const aiFormatting = {
 		const preset = getPreset(presetName)
 		const prompt = preset.getPrompt(text)
 
-		return await ai.generateText({prompt, model: preset.model})
+		const response = await ai.generateText({prompt, model: preset.model})
+		return response.text
 	},
 }

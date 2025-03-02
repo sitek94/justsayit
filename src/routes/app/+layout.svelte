@@ -2,7 +2,7 @@
 	import {onDestroy, onMount, type Snippet} from 'svelte'
 	import {hasRequiredSettings, initializeSettings, settings} from '$lib/core/settings'
 	import {destroyTray, initializeTray} from '$lib/features/system-tray'
-	import {fileSystem} from '$lib/file-system'
+	import {fileSystem} from '$lib/services/file-system'
 	import {openSettingsWindow} from '$lib/services/windows'
 
 	let {children}: {children: Snippet} = $props()
