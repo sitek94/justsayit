@@ -1,13 +1,12 @@
-type RecorderParams = {
+export function createRecorder({
+	onStart,
+	onStop,
+}: {
 	onStart: () => void
 	onStop: (audio: Blob) => Promise<void>
-}
-
-export function createRecorder({onStart, onStop}: RecorderParams) {
+}) {
 	let mediaStream = $state<MediaStream | null>(null)
 	let recorder = $state<MediaRecorder | null>(null)
-	// This function will create and return a MediaRecorder
-	// along with methods to control it
 
 	async function startRecording() {
 		mediaStream = await navigator.mediaDevices.getUserMedia({audio: true})
@@ -48,7 +47,6 @@ export function createRecorder({onStart, onStop}: RecorderParams) {
 		get mediaStream() {
 			return mediaStream
 		},
-
 		get isRecording() {
 			return recorder?.state === 'recording'
 		},

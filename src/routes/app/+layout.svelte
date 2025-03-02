@@ -1,19 +1,21 @@
 <script lang="ts">
 	import {onDestroy, onMount, type Snippet} from 'svelte'
 	import {hasRequiredSettings, initializeSettings, settings} from '$lib/core/settings'
+	import {checkForUpdates} from '$lib/features/app-updates'
 	import {destroyTray, initializeTray} from '$lib/features/system-tray'
 	import {fileSystem} from '$lib/services/file-system'
 	import {openSettingsWindow} from '$lib/services/windows'
 
 	let {children}: {children: Snippet} = $props()
-	let isLoading = $state(true)
+	let isInitializing = $state(true)
 
 	onMount(async () => {
+		if (import.meta.env.PROD) await checkForUpdates()
 		await initializeSettings()
 		await initializeTray()
 		await fileSystem.ensureAppDirectoriesExist()
 
-		isLoading = false
+		isInitializing = false
 	})
 
 	onDestroy(async () => {
@@ -21,9 +23,9 @@
 	})
 </script>
 
-{#if isLoading}
+{#if isInitializing}
 	<div class="flex h-screen items-center justify-center">
-		<p>Loading settings...</p>
+		<p>Initializing...</p>
 	</div>
 {:else if !hasRequiredSettings($settings)}
 	<div class="container mx-auto p-4">

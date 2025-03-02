@@ -3,7 +3,7 @@
 	import {onDestroy, onMount} from 'svelte'
 	import type {Language} from '$lib/core/types'
 	import {aiFormatting, type PresetName} from '$lib/features/ai-formatting'
-	import {createRecorder} from '$lib/features/audio/recoder.svelte'
+	import {createRecorder} from '$lib/features/audio/recorder.svelte'
 	import Visualizer from '$lib/features/audio/visualizer.svelte'
 	import type {ModelName} from '$lib/services/ai'
 	import {clipboard} from '$lib/services/clipboard'

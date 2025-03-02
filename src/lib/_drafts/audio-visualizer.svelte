@@ -2,7 +2,7 @@
 	import {app} from '@tauri-apps/api'
 	import {register, unregister} from '@tauri-apps/plugin-global-shortcut'
 	import {onDestroy, onMount} from 'svelte'
-	import FrequencyVisualizer from './frequency-visualizer.svelte'
+	import FrequencyVisualizer from '../frequency-visualizer.svelte'
 
 	let {onRecordingComplete}: {onRecordingComplete: (audioBlob: Blob) => void} = $props()
 
