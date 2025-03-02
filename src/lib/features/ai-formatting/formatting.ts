@@ -1,32 +1,13 @@
-import {getPrompt} from './presets'
-import type {AiModel, FormattingPreset, Language} from '$lib/core/types'
-import {ai} from '$lib/features/ai'
-
-type FormattingOptions = {
-	text: string
-	preset?: FormattingPreset
-	model?: AiModel
-	language?: Language
-	apiKeys: Record<string, string>
-}
+import {getPreset, type PresetName} from './presets'
+import {ai} from '$lib/services/ai'
 
 export const aiFormatting = {
-	format: async ({
-		text,
-		preset = 'default',
-		model = 'gpt4o',
-		language = 'en',
-		apiKeys,
-	}: FormattingOptions) => {
+	format: async ({text, presetName = 'default'}: {text: string; presetName: PresetName}) => {
 		if (!text) return ''
 
-		try {
-			const prompt = getPrompt(text, preset, language)
+		const preset = getPreset(presetName)
+		const prompt = preset.getPrompt(text)
 
-			return await ai.generateText({prompt, model, apiKeys})
-		} catch (error) {
-			console.error('Error formatting text:', error)
-			throw error
-		}
+		return await ai.generateText({prompt, model: preset.model})
 	},
 }
