@@ -1,9 +1,9 @@
+import type {Language} from '$lib/core/types'
+import type {ModelName} from '$lib/services/ai'
 import {getDefaultPrompt} from './prompts/default'
 import {getEmailPrompt} from './prompts/email'
 import {getMessagePrompt} from './prompts/message'
 import {getNotePrompt} from './prompts/note'
-import type {Language} from '$lib/core/types'
-import type {ModelName} from '$lib/services/ai'
 
 type Preset = {
 	name: string

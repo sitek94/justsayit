@@ -1,5 +1,5 @@
-import {getTranscriptionProvider} from './providers'
 import type {Language} from '$lib/core/types'
+import {getTranscriptionProvider} from './providers'
 
 export const transcription = {
 	transcribe: async (audioBuffer: ArrayBuffer, language: Language) => {

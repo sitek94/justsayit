@@ -1,5 +1,5 @@
-import {getPreset, type PresetName} from './presets'
 import {ai} from '$lib/services/ai'
+import {getPreset, type PresetName} from './presets'
 
 export const aiFormatting = {
 	format: async ({text, presetName = 'default'}: {text: string; presetName: PresetName}) => {

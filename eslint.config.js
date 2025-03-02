@@ -31,7 +31,7 @@ export default tseslint.config(
 	{
 		files: ['src/**/*.{js,ts,svelte}'],
 		extends: [importPlugin.flatConfigs.recommended, importPlugin.flatConfigs.typescript],
-		settings: {'import/internal-regex': '^$lib/'},
+		settings: {'import/internal-regex': /^\$lib\/.*/},
 		rules: {
 			'import/no-unresolved': 'off',
 			'import/order': [
