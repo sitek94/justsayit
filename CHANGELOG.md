@@ -1,5 +1,13 @@
 # justsayit
 
+## 0.1.3
+
+### Patch Changes
+
+- use turbo whisper model for stt ([`ff4212f`](https://github.com/sitek94/justsayit/commit/ff4212f9e1a36b66953495f21f2788e6fffd4531))
+
+- improve hiding showing app; add shortcut for just toggling visibility ([`4ab2938`](https://github.com/sitek94/justsayit/commit/4ab29387190ab637060046ae7fdd2857eb6c9d7e))
+
 ## 0.1.2
 
 ### Patch Changes
