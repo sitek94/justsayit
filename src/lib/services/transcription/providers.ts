@@ -15,7 +15,7 @@ const groqProvider: TranscriptionProvider = {
 
 		const transcription = await client.audio.transcriptions.create({
 			file: await toFile(buffer, 'audio.wav'),
-			model: 'whisper-large-v3',
+			model: 'whisper-large-v3-turbo',
 			language,
 		})
 
