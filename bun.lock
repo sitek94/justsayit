@@ -19,7 +19,7 @@
         "@types/d3": "^7.4.3",
         "ai": "^4.1.41",
         "d3": "^7.9.0",
-        "groq-sdk": "^0.13.0",
+        "groq-sdk": "^0.15.0",
         "zod": "^3.24.2",
       },
       "devDependencies": {
@@ -745,7 +745,7 @@
 
     "graphemer": ["graphemer@1.4.0", "", {}, "sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag=="],
 
-    "groq-sdk": ["groq-sdk@0.13.0", "", { "dependencies": { "@types/node": "^18.11.18", "@types/node-fetch": "^2.6.4", "abort-controller": "^3.0.0", "agentkeepalive": "^4.2.1", "form-data-encoder": "1.7.2", "formdata-node": "^4.3.2", "node-fetch": "^2.6.7" } }, "sha512-zHzideA1DIXbJng3Sd9L5zovg+tGyvroUF1zpiUJK0NMnYJDuQyHi32bD6UYcXvoGwEk2/uQ8jZ8rpV7CMoiCg=="],
+    "groq-sdk": ["groq-sdk@0.15.0", "", { "dependencies": { "@types/node": "^18.11.18", "@types/node-fetch": "^2.6.4", "abort-controller": "^3.0.0", "agentkeepalive": "^4.2.1", "form-data-encoder": "1.7.2", "formdata-node": "^4.3.2", "node-fetch": "^2.6.7" } }, "sha512-aYDEdr4qczx3cLCRRe+Beb37I7g/9bD5kHF+EEDxcrREWw1vKoRcfP3vHEkJB7Ud/8oOuF0scRwDpwWostTWuQ=="],
 
     "has-bigints": ["has-bigints@1.1.0", "", {}, "sha512-R3pbpkcIqv2Pm3dUwgjclDRVmWpTJW2DcMzcIhEXEx1oh/CEMObMm3KLmRJOdvhM7o4uQBnwr8pzRK2sJWIqfg=="],
 

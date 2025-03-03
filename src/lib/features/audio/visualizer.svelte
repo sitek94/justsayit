@@ -1,4 +1,3 @@
-<!-- src/lib/components/AudioVisualizer.svelte -->
 <script lang="ts">
 	import {onDestroy} from 'svelte'
 
@@ -85,4 +84,4 @@
 	})
 </script>
 
-<canvas class="h-[130px] w-full" data-tauri-drag-region bind:this={canvas}></canvas>
+<canvas class="h-[130px] w-full" bind:this={canvas}></canvas>

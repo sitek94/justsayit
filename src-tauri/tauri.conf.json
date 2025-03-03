@@ -17,9 +17,9 @@
         "resizable": false,
         "width": 350,
         "height": 150,
-        "url": "/app"
-      }
-      
+        "url": "/app",
+        "alwaysOnTop": true
+        }
     ],
     "security": {
       "csp": null

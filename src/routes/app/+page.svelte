@@ -11,7 +11,12 @@
 	import {keyboardMaestro} from '$lib/services/keyboard-maestro'
 	import {playStartSound, playStopSound} from '$lib/services/play-sound'
 	import {transcription} from '$lib/services/transcription'
-	import {bringMainWindowToFront, hideMainWindow} from '$lib/services/windows'
+	import {
+		bringMainWindowToFront,
+		hideMainWindow,
+		toggleMainWindowVisibility,
+	} from '$lib/services/windows'
+
 	let isProcessing = $state(false)
 	let formatWithAi = $state(false)
 	let preset = $state<PresetName>('default')
@@ -71,14 +76,21 @@
 				}
 			}
 		})
+
+		register('Control+Shift+Q', async event => {
+			if (event.state === 'Released') {
+				await toggleMainWindowVisibility()
+			}
+		})
 	})
 
 	onDestroy(() => {
 		unregister('Control+Q')
+		unregister('Control+Shift+Q')
 	})
 </script>
 
-<div class="relative flex flex-col">
+<div class="relative flex h-screen flex-col">
 	{#if isProcessing}
 		<div
 			data-tauri-drag-region
@@ -87,11 +99,13 @@
 			<p class="text-white">Processing...</p>
 		</div>
 	{/if}
-	{#if recorder.mediaStream}
-		<Visualizer stream={recorder.mediaStream} />
-	{/if}
+	<div class="grow bg-gray-200" data-tauri-drag-region>
+		{#if recorder.mediaStream}
+			<Visualizer stream={recorder.mediaStream} />
+		{/if}
+	</div>
 
-	<div class="flex justify-evenly bg-[#ccc] text-sm">
+	<div class="flex justify-evenly bg-gray-200 text-sm">
 		<button
 			class="rounded-lg bg-gray-500 px-1 text-white"
 			onclick={() => (formatWithAi = !formatWithAi)}

@@ -1,7 +1,12 @@
 import {getAllWebviewWindows, WebviewWindow} from '@tauri-apps/api/webviewWindow'
 
+const WINDOW_LABELS = {
+	MAIN: 'main',
+	SETTINGS: 'settings',
+}
+
 export async function openSettingsWindow() {
-	const webview = new WebviewWindow('settings', {
+	const webview = new WebviewWindow(WINDOW_LABELS.SETTINGS, {
 		title: 'Settings',
 		decorations: true,
 		resizable: false,
@@ -20,13 +25,25 @@ export async function openSettingsWindow() {
 
 export async function bringMainWindowToFront() {
 	// `app.show() steals the focus`
-	const mainWindow = await getWindowByLabel('main')
+	const mainWindow = await getWindowByLabel(WINDOW_LABELS.MAIN)
+	await mainWindow?.setAlwaysOnTop(true)
 	await mainWindow?.show()
 }
 
 export async function hideMainWindow() {
-	const mainWindow = await getWindowByLabel('main')
+	const mainWindow = await getWindowByLabel(WINDOW_LABELS.MAIN)
+	await mainWindow?.setAlwaysOnTop(false)
 	await mainWindow?.hide()
+}
+
+export async function toggleMainWindowVisibility() {
+	const mainWindow = await getWindowByLabel(WINDOW_LABELS.MAIN)
+	const isVisible = await mainWindow?.isVisible()
+	if (isVisible) {
+		await hideMainWindow()
+	} else {
+		await bringMainWindowToFront()
+	}
 }
 
 async function getWindowByLabel(label: string) {
