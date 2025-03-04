@@ -33,7 +33,6 @@
 		onStop: async audio => {
 			playStopSound()
 			await processAudio(audio)
-			await hideMainWindow()
 		},
 	})
 
@@ -66,11 +65,25 @@
 		return transcript
 	}
 
+	// Local keyboard shortcuts (only when main window is focused)
+	async function handleKeydown(event: KeyboardEvent) {
+		if (event.code === 'Space') {
+			event.preventDefault()
+			if (recorder.isRecording) {
+				await recorder.stopRecording()
+			} else {
+				await recorder.startRecording()
+			}
+		}
+	}
+
 	onMount(async () => {
+		// Global keyboard shortcuts
 		register('Control+Q', async event => {
 			if (event.state === 'Released') {
 				if (recorder.isRecording) {
 					await recorder.stopRecording()
+					await hideMainWindow()
 				} else {
 					await recorder.startRecording()
 				}
@@ -82,13 +95,22 @@
 				await toggleMainWindowVisibility()
 			}
 		})
+
+		register('Control+Shift+Alt+Q', async event => {
+			if (event.state === 'Released') {
+				await recorder.stopMediaStream()
+			}
+		})
 	})
 
 	onDestroy(() => {
 		unregister('Control+Q')
 		unregister('Control+Shift+Q')
+		unregister('Control+Shift+Alt+Q')
 	})
 </script>
+
+<svelte:window on:keydown={handleKeydown} />
 
 <div class="relative flex h-screen flex-col">
 	{#if isProcessing}

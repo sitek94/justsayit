@@ -31,9 +31,12 @@ export function createRecorder({
 
 			await onStop(audio)
 
-			// Clean up
+			// Cleanup
 			chunks = []
 			recorder = null
+			mediaStream?.getAudioTracks().forEach(track => {
+				track.enabled = false // Mute the track
+			})
 			mediaStream = null
 		}
 
@@ -43,6 +46,18 @@ export function createRecorder({
 	async function stopRecording() {
 		if (recorder) {
 			recorder.stop()
+		}
+	}
+
+	/**
+	 * Stops the media stream and closes the microphone. Normally, I just mute the media stream track so
+	 * that the next recording can start almost immediately. This method however is used to manually release the
+	 * microphone and completely close all the tracks so that the app doesn't interfere with other apps that
+	 * require the microphone.
+	 */
+	async function stopMediaStream() {
+		if (mediaStream) {
+			mediaStream.getTracks().forEach(track => track.stop())
 		}
 	}
 
@@ -58,5 +73,6 @@ export function createRecorder({
 		// Actions
 		startRecording,
 		stopRecording,
+		stopMediaStream,
 	}
 }
