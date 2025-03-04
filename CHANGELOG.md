@@ -1,5 +1,11 @@
 # justsayit
 
+## 0.1.5
+
+### Patch Changes
+
+- add transparency and border radius to main app window ([`722ab26`](https://github.com/sitek94/justsayit/commit/722ab262519b24452be3035d9817bc1672d822b3))
+
 ## 0.1.4
 
 ### Patch Changes
