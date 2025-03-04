@@ -43,11 +43,9 @@
 
 			analyser.getByteTimeDomainData(dataArray)
 
-			canvasCtx.fillStyle = '#ccc'
-			canvasCtx.fillRect(0, 0, WIDTH, HEIGHT)
-
+			canvasCtx.clearRect(0, 0, WIDTH, HEIGHT)
 			canvasCtx.lineWidth = 2
-			canvasCtx.strokeStyle = 'rgb(0, 0, 0)'
+			canvasCtx.strokeStyle = 'rgb(255, 255, 255)'
 
 			canvasCtx.beginPath()
 
@@ -84,4 +82,4 @@
 	})
 </script>
 
-<canvas class="h-[130px] w-full" bind:this={canvas}></canvas>
+<canvas data-tauri-drag-region class="h-full w-full" bind:this={canvas}></canvas>

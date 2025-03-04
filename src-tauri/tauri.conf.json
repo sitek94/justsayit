@@ -13,14 +13,22 @@
     "windows": [
       {
         "label": "main",
+
         "decorations": false,
         "resizable": false,
         "width": 350,
         "height": 150,
         "url": "/app",
-        "alwaysOnTop": true
+        "alwaysOnTop": true,
+        "transparent": true,
+        "shadow": false,
+        "windowEffects": {
+          "effects": ["hudWindow"],
+          "radius": 16
         }
+      }
     ],
+    "macOSPrivateApi": true,
     "security": {
       "csp": null
     }

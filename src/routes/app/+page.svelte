@@ -112,44 +112,41 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div class="relative flex h-screen flex-col">
-	{#if isProcessing}
-		<div
-			data-tauri-drag-region
-			class="absolute inset-0 z-10 flex items-center justify-center bg-black/75"
-		>
-			<p class="text-white">Processing...</p>
-		</div>
-	{/if}
-	<div class="grow bg-gray-200" data-tauri-drag-region>
-		{#if recorder.mediaStream}
+<div class="flex h-screen flex-col">
+	{#if isProcessing}{/if}
+	<div class="h-[130px]" data-tauri-drag-region>
+		{#if recorder.mediaStream && !isProcessing}
 			<Visualizer stream={recorder.mediaStream} />
+		{:else if isProcessing}
+			<div data-tauri-drag-region class="flex h-full items-center justify-center">
+				<p class="text-lg text-white">Processing...</p>
+			</div>
 		{/if}
 	</div>
 
-	<div class="flex justify-evenly bg-gray-200 text-sm">
+	<div class="flex h-[20px] justify-evenly text-sm">
 		<button
-			class="rounded-lg bg-gray-500 px-1 text-white"
+			class="rounded-sm bg-white px-1 text-gray-900"
 			onclick={() => (formatWithAi = !formatWithAi)}
 		>
 			{formatWithAi ? 'ai:on' : 'ai:off'}
 		</button>
 
-		<select bind:value={preset}>
+		<select class="bg-white text-gray-900" bind:value={preset}>
 			<option value="default">default</option>
 			<option value="message">message</option>
 			<option value="note">note</option>
 			<option value="email">email</option>
 		</select>
 
-		<select bind:value={aiModel}>
+		<select class="bg-white text-gray-900" bind:value={aiModel}>
 			<option value="gpt4o">gpt4o</option>
 			<option value="gpt4oMini">gpt4oMini</option>
 			<option value="claude35Sonnet">claude35Sonnet</option>
 			<option value="claude35Haiku">claude35Haiku</option>
 		</select>
 
-		<select bind:value={language}>
+		<select class="bg-white text-gray-900" bind:value={language}>
 			<option value="en">en</option>
 			<option value="pl">pl</option>
 			<option value="es">es</option>
