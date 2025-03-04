@@ -1,5 +1,11 @@
 # justsayit
 
+## 0.1.6
+
+### Patch Changes
+
+- ensure playing sound and processing is done before hiding window ([`16b6c71`](https://github.com/sitek94/justsayit/commit/16b6c71223c8427d10accf638546ca949dc62ef6))
+
 ## 0.1.5
 
 ### Patch Changes
