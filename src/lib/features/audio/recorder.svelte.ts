@@ -1,3 +1,5 @@
+import {promisifyEvent} from '$lib/utils/promisify-event'
+
 export function createRecorder({
 	onBeforeStart,
 	onStart,
@@ -45,7 +47,7 @@ export function createRecorder({
 
 	async function stopRecording() {
 		if (recorder) {
-			recorder.stop()
+			return promisifyEvent(recorder, 'stop', () => recorder?.stop())
 		}
 	}
 

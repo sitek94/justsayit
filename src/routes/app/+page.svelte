@@ -31,7 +31,7 @@
 			playStartSound()
 		},
 		onStop: async audio => {
-			playStopSound()
+			await playStopSound()
 			await processAudio(audio)
 		},
 	})
