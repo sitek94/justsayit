@@ -24,12 +24,9 @@
 	let aiModel = $state<ModelName>('claude35Sonnet')
 	let language = $state<Language>('en')
 
-	$effect(() => {
-		applyPreset(preset, language)
-	})
-
-	function applyPreset(preset: PresetName, language: Language) {
-		const {model} = getPreset(preset, language)
+	function applyPreset(_preset: PresetName) {
+		const {model} = getPreset(_preset, language)
+		preset = _preset
 		aiModel = model
 		formatWithAi = true
 	}
@@ -101,22 +98,22 @@
 
 		// Default preset
 		if (event.metaKey && event.code === 'Digit2') {
-			preset = 'default'
+			applyPreset('default')
 		}
 
 		// Message preset
 		if (event.metaKey && event.code === 'Digit3') {
-			preset = 'message'
+			applyPreset('message')
 		}
 
 		// Note preset
 		if (event.metaKey && event.code === 'Digit4') {
-			preset = 'note'
+			applyPreset('note')
 		}
 
 		// Email preset
 		if (event.metaKey && event.code === 'Digit5') {
-			preset = 'email'
+			applyPreset('email')
 		}
 	}
 
