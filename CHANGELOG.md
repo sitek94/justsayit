@@ -1,5 +1,13 @@
 # justsayit
 
+## 0.1.7
+
+### Patch Changes
+
+- fix changing language ([`8833999`](https://github.com/sitek94/justsayit/commit/88339992a0d6c9be5f66e29eb083e2416681cb8a))
+
+- add more shortcuts ([`6156f44`](https://github.com/sitek94/justsayit/commit/6156f44ee563611e94ae3a53faa4ca626bc57240))
+
 ## 0.1.6
 
 ### Patch Changes
