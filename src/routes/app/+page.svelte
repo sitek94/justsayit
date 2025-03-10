@@ -3,6 +3,7 @@
 	import {onDestroy, onMount} from 'svelte'
 	import type {Language} from '$lib/core/types'
 	import {aiFormatting, type PresetName} from '$lib/features/ai-formatting'
+	import {getPreset} from '$lib/features/ai-formatting/presets'
 	import {createRecorder} from '$lib/features/audio/recorder.svelte'
 	import Visualizer from '$lib/features/audio/visualizer.svelte'
 	import type {ModelName} from '$lib/services/ai'
@@ -22,6 +23,16 @@
 	let preset = $state<PresetName>('default')
 	let aiModel = $state<ModelName>('claude35Sonnet')
 	let language = $state<Language>('en')
+
+	$effect(() => {
+		applyPreset(preset, language)
+	})
+
+	function applyPreset(preset: PresetName, language: Language) {
+		const {model} = getPreset(preset, language)
+		aiModel = model
+		formatWithAi = true
+	}
 
 	const recorder = createRecorder({
 		onBeforeStart: async () => {
@@ -56,10 +67,7 @@
 
 	async function formatTranscript(transcript: string) {
 		if (formatWithAi) {
-			return await aiFormatting.format({
-				text: transcript,
-				presetName: preset,
-			})
+			return await aiFormatting.format({text: transcript, presetName: preset, language})
 		}
 
 		return transcript
@@ -74,6 +82,41 @@
 			} else {
 				await recorder.startRecording()
 			}
+		}
+
+		// Loop through languages (with shift go backwards)
+		if (event.metaKey && event.code === 'KeyL') {
+			const increment = event.shiftKey ? -1 : 1
+			const languages: Language[] = ['en', 'pl'] // I very rarely use ES so can just click it when needed
+			const nextIndex = (languages.indexOf(language) + increment) % languages.length
+			language = languages[nextIndex] as Language
+		}
+
+		// Toggle format with ai, kind of like preset zero, which means no AI
+		// need to think about it later on, maybe it could be a part of presets
+		// instead of a separate toggle
+		if (event.metaKey && event.code === 'Digit1') {
+			formatWithAi = !formatWithAi
+		}
+
+		// Default preset
+		if (event.metaKey && event.code === 'Digit2') {
+			preset = 'default'
+		}
+
+		// Message preset
+		if (event.metaKey && event.code === 'Digit3') {
+			preset = 'message'
+		}
+
+		// Note preset
+		if (event.metaKey && event.code === 'Digit4') {
+			preset = 'note'
+		}
+
+		// Email preset
+		if (event.metaKey && event.code === 'Digit5') {
+			preset = 'email'
 		}
 	}
 
