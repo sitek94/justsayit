@@ -1,5 +1,13 @@
 # justsayit
 
+## 0.1.8
+
+### Patch Changes
+
+- fix applying presets ([`361a30c`](https://github.com/sitek94/justsayit/commit/361a30c7a963585be70cd8fd6ae36371d5092a11))
+
+- handle errors when checking for updates ([`7e78464`](https://github.com/sitek94/justsayit/commit/7e78464b4faf754b7c3b4bc2d187f62ab705e59e))
+
 ## 0.1.7
 
 ### Patch Changes
