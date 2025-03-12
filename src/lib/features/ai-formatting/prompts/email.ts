@@ -12,7 +12,8 @@ import type {Language} from '$lib/core/types'
  */
 export const getEmailPrompt = (text: string, language: Language) => {
 	const languageName = LANGUAGE_NAMES[language]
-	const languagePrompt = `- User is speaking ${languageName}, always respond in ${languageName}`
+	const languagePrompt = `- User is speaking ${languageName}, always respond in ${languageName}
+- When user uses phrases or words that are not in ${languageName} keep them as is`
 
 	return `<instructions>
 Reformat the user message, which will be wrapped in <user_message> tags.

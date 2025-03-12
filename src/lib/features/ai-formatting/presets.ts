@@ -28,7 +28,7 @@ export const getPreset = (name: PresetName, language: Language) => {
 		},
 		message: {
 			name: 'Message',
-			model: 'gpt4oMini',
+			model: 'claude35Sonnet',
 			getPrompt: text => getMessagePrompt(text, language),
 		},
 		note: {
