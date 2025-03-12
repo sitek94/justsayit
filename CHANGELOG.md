@@ -1,5 +1,11 @@
 # justsayit
 
+## 0.1.9
+
+### Patch Changes
+
+- focus main window when toggling visibility and improve prompts ([`dcc51ee`](https://github.com/sitek94/justsayit/commit/dcc51ee7191a15c22520b7ca400e3005a23e6a91))
+
 ## 0.1.8
 
 ### Patch Changes
