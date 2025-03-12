@@ -43,6 +43,8 @@ export async function toggleMainWindowVisibility() {
 		await hideMainWindow()
 	} else {
 		await bringMainWindowToFront()
+		// Focus the main window so that we can use local shortcuts immediately
+		await mainWindow?.setFocus()
 	}
 }
 
