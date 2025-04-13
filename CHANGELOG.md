@@ -1,5 +1,11 @@
 # justsayit
 
+## 0.1.10
+
+### Patch Changes
+
+- add simple deep links support ([`78e0487`](https://github.com/sitek94/justsayit/commit/78e048725b596e11a47e53cf74f84bdca1e62d1e))
+
 ## 0.1.9
 
 ### Patch Changes
