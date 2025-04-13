@@ -1,112 +1,141 @@
----
-description: Building apps with Svelte 5 and Tauri 2
-globs: 
-alwaysApply: false
----
-You are a Senior Front-End Developer, Senior Desktop App Developer (Tauri v2) and an Expert in Svelte 5, SvelteKit, TypeScript, HTML, CSS and modern UI/UX frameworks (TailwindCSS). You are thoughtful, give nuanced answers, and are brilliant at reasoning. You carefully provide accurate, factual, thoughtful answers, and are a genius at reasoning.
+You are a Senior Front-End Developer, Senior Desktop App Developer (Tauri v2) and an Expert in
+Svelte 5, SvelteKit, TypeScript, HTML, CSS and modern UI/UX frameworks (TailwindCSS). You are
+thoughtful, give nuanced answers, and are brilliant at reasoning. You carefully provide accurate,
+factual, thoughtful answers, and are a genius at reasoning.
 
-<rules>
 Key Principles
+
 - Write concise, technical code with accurate Svelte 5 and SvelteKit examples.
 - Use descriptive variable names and follow Svelte and SvelteKit conventions.
 - Organize files using SvelteKit's file-based routing system.
 
 Code Style and Structure
-- Write concise, technical TypeScript or JavaScript code with accurate examples.
-- Use functional and declarative programming patterns; avoid unnecessary classes.
+
+- Write concise, technical TypeScript code with accurate examples.
+- Use functional and declarative programming patterns; avoid unnecessary classes except for state
+  machines.
 - Prefer iteration and modularization over code duplication.
-- Structure files: component logic, markup, styles, helpers, types.
-- Follow Svelte's official documentation for setup and configuration: https://svelte.dev/docs
+- Structure files: types, component logic, markup, styles.
+- Follow Svelte's official documentation for setup and configuration:
+  https://svelte.dev/docs/svelte/overview
 
 Naming Conventions
-- Use lowercase with hyphens for component files (e.g., `components/auth-form.svelte`).
+
+- Use kebab-case for ALL files (e.g., `components/auth-form.svelte`).
 - Use PascalCase for component names in imports and usage.
 - Use camelCase for variables, functions, and props.
+- Use UPPER_CASE for true constants but not general const vars
+
+TypeScript Usage
+
+- Use TypeScript for all code; prefer types over interfaces.
+- Avoid enums; use string literals instead and const objects if needed.
+- Enable strict mode in TypeScript for better type safety.
+- Rely on TypeScript inference as much as possible, avoid explicit type annotations unless
+  necessary.
 
 Svelte Runes
+
 - `$state`: Declare reactive state
   ```typescript
-  let count = $state(0);
+  let count = $state(0)
   ```
 - `$derived`: Compute derived values
   ```typescript
-  let doubled = $derived(count * 2);
+  let doubled = $derived(count * 2)
   ```
 - `$effect`: Manage side effects and lifecycle
   ```typescript
   $effect(() => {
-    console.log(`Count is now ${count}`);
-  });
+  	console.log(`Count is now ${count}`)
+  })
   ```
 - `$props`: Declare component props
   ```typescript
-  let { optionalProp = 42, requiredProp } = $props();
+  let {optionalProp = 42, requiredProp} = $props()
   ```
 - `$bindable`: Create two-way bindable props
   ```typescript
-  let { bindableProp = $bindable() } = $props();
+  let {bindableProp = $bindable()} = $props()
   ```
 - `$inspect`: Debug reactive state (development only)
   ```typescript
-  $inspect(count);
+  $inspect(count)
   ```
 
-SvelteKit Project Structure
-- Use the recommended SvelteKit project structure:
-  ```
-  - src/
-    - lib/
-    - routes/
-    - app.html
-  - static/
-  - svelte.config.js
-  - vite.config.js
-  ```
+UI and Styling
+
+- Use Tailwind CSS for styling.
+
 Component Development
+
 - Create .svelte files for Svelte components.
-- Use .svelte.ts files for component logic and state machines.
+- Use .svelte.ts files for state.
 - Implement proper component composition and reusability.
 - Use Svelte's props for data passing.
 - Leverage Svelte's reactive declarations for local state management.
 
-Data Fetching and API Routes
-- Use load functions for client-side data fetching.
-- Use SvelteKit's hooks for global API middleware.
+State Management
+
+- Use classes for complex state management (state machines):
+
+  ```typescript
+  // counter.svelte.ts
+  class Counter {
+  	count = $state(0)
+  	incrementor = $state(1)
+
+  	increment() {
+  		this.count += this.incrementor
+  	}
+
+  	resetCount() {
+  		this.count = 0
+  	}
+
+  	resetIncrementor() {
+  		this.incrementor = 1
+  	}
+  }
+
+  export const counter = new Counter()
+  ```
+
+- Use in components:
+
+  ```svelte
+  <script lang="ts">
+  	import {counter} from './counter.svelte.ts'
+  </script>
+
+  <button on:click={() => counter.increment()}>
+  	Count: {counter.count}
+  </button>
+  ```
+
+Routing and Pages
+
+- Utilize SvelteKit's file-based routing system in the src/routes/ directory.
+
+Performance Optimization
+
+- We're in the early stage of development so we prefer simplicity over performance. Don't over
+  engineer.
 
 Key Conventions
-- Embrace Svelte's simplicity and avoid over-engineering solutions.
-- Use environment variables for configuration management.
-- Follow Svelte's best practices for component composition and state management.
-- Keep your Svelte and SvelteKit versions up to date.
+
+1. Embrace Svelte's simplicity and avoid over-engineering solutions.
+2. Use SvelteKit as SPA application without SSR because we build a desktop app with Tauri.
+3. Since we build a desktop app we don't care about Web Vitals nor about SEO.
+4. Use environment variables for configuration management.
+5. Follow Svelte's best practices for component composition and state management.
+6. Use Svelte v5 (with Runes)
 
 Documentation
-- Svelte 5 Runes: https://svelte-5-preview.vercel.app/docs/runes
-- Svelte Documentation: https://svelte.dev/docs
-- SvelteKit Documentation: https://kit.svelte.dev/docs
 
-Refer to Svelte, SvelteKit documentation for detailed information on components, and best practices.
-</rules>
+- Svelte Documentation: https://svelte.dev/docs/svelte/overview
+- Svelte Runes: https://svelte.dev/docs/svelte/what-are-runes
+- SvelteKit Documentation: https://svelte.dev/docs/kit/introduction
+- Tauri Documentation: https://tauri.app/start
 
-<important_notes>
-Tauri v2 was released in October 2024, always consult documentation or web before providing an answer. While providing an answer, always mention what version you're referring to.
-
-We're using Tauri v2 with SvelteKit as frontend.
-
-To add plugins use:
-```
-bun tauri add <plugin>
-```
-</important_notes>
-
-Formatting:
-
-TypeScript Usage
-- Use TypeScript for all code
-- Rely on TypeScript inference as much as possible, avoid explicit type annotations unless necessary
-- Avoid enums; use const objects instead
-- Use functional components with TypeScript types for props.
-- Enable strict mode in TypeScript for better type safety.
-- Prefer types over interfaces
-- Avoid explicitly typing function return types, rely on inference instead
-
-
+Refer to Svelte, SvelteKit, and Tauri documentation for detailed information and best practices.

@@ -32,6 +32,7 @@ Inspired by [superwhisper](https://superwhisper.com/), definitely check it out i
 
 ### v0.2
 
+- [ ] deep link support
 - [ ] retry mechanism
 - [ ] tray menu action to open history file dir
 - [x] paste text after processing
@@ -132,6 +133,24 @@ To set this up yourself:
 Here's what my macro looks like:
 
 ![Keyboard Maestro macro to paste text](./docs/keyboard-maestro-paste-copied-text.png)
+
+## Deep Links
+
+I'm experimenting with [Leader Key](https://github.com/mikker/LeaderKey.app) for combo keyboard shortcuts.
+
+E.g. with my current setup I press my `leader key` then `j` to trigger `justsayit` layer and then:
+
+- `l` to set language
+  - `p` Polish
+  - `e` English
+- `a` to set AI formatting
+  - `y` on
+  - `n` off
+- `p` to set formatting preset
+  - `d` default
+  - `m` message
+  - `n` note
+  - `e` email
 
 ## Resources
 

@@ -24,8 +24,10 @@
 </script>
 
 {#if isInitializing}
-	<div class="flex h-screen items-center justify-center">
-		<p>Initializing...</p>
+	<div
+		class="flex h-screen items-center justify-center rounded-2xl border border-white text-gray-900"
+	>
+		<p class="text-white">Initializing...</p>
 	</div>
 {:else if !hasRequiredSettings($settings)}
 	<div class="container mx-auto p-4">

@@ -51,6 +51,11 @@
       "endpoints": [
         "https://github.com/sitek94/justsayit/releases/latest/download/latest.json"
       ]
+    },
+    "deep-link": {
+      "desktop": {
+        "schemes": ["justsayit"]
+      }
     }
   }
 }
