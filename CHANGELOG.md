@@ -1,5 +1,11 @@
 # justsayit
 
+## 0.1.12
+
+### Patch Changes
+
+- fix updating ai state from deep link ([`a5865af`](https://github.com/sitek94/justsayit/commit/a5865af213518a05d553f997679bb5bed1a0fd09))
+
 ## 0.1.11
 
 ### Patch Changes
