@@ -1,5 +1,11 @@
 # justsayit
 
+## 0.1.11
+
+### Patch Changes
+
+- fix parsing ai deep link param ([`c19bc7f`](https://github.com/sitek94/justsayit/commit/c19bc7feb89b5cc5eb16c1de2734c6d5cd78994a))
+
 ## 0.1.10
 
 ### Patch Changes
