@@ -4,10 +4,7 @@ import {LanguageSchema, PresetSchema} from '$lib/core/schemas'
 import {openSettingsWindow} from '$lib/services/windows'
 
 const ParamsSchema = z.object({
-	ai: z
-		.enum(['true', 'false'])
-		.transform(value => value === 'true')
-		.optional(),
+	ai: z.enum(['true', 'false']).optional(),
 	preset: PresetSchema.optional(),
 	lang: LanguageSchema.optional(),
 })

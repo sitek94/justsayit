@@ -143,14 +143,14 @@
 			onStart: async params => {
 				if (params.lang) language.set(params.lang)
 				if (params.preset) applyPreset(params.preset)
-				if (params.ai) formatWithAi.set(params.ai)
+				if (params.ai) formatWithAi.set(params.ai === 'true')
 
 				await recorder.startRecording()
 			},
 			onState: async params => {
 				if (params.lang) language.set(params.lang)
 				if (params.preset) applyPreset(params.preset)
-				if (params.ai) formatWithAi.set(params.ai)
+				if (params.ai) formatWithAi.set(params.ai === 'true')
 			},
 		})
 	})
