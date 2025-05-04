@@ -1,5 +1,5 @@
 <script lang="ts">
-	import {register, unregister} from '@tauri-apps/plugin-global-shortcut'
+	import {register, unregister, unregisterAll} from '@tauri-apps/plugin-global-shortcut'
 	import {onDestroy, onMount} from 'svelte'
 	import {aiModel, formatWithAi, language, preset} from '$lib/core/state'
 	import type {Language} from '$lib/core/types'
@@ -122,8 +122,10 @@
 	}
 
 	onMount(async () => {
+		await unregisterAll()
+
 		// Global keyboard shortcuts
-		register('Control+Q', async event => {
+		await register('Control+Q', async event => {
 			if (event.state === 'Released') {
 				if (recorder.isRecording) {
 					await recorder.stopRecording()
@@ -134,13 +136,13 @@
 			}
 		})
 
-		register('Control+Shift+Q', async event => {
+		await register('Control+Shift+Q', async event => {
 			if (event.state === 'Released') {
 				await toggleMainWindowVisibility()
 			}
 		})
 
-		register('Control+Shift+Alt+Q', async event => {
+		await register('Control+Shift+Alt+Q', async event => {
 			if (event.state === 'Released') {
 				await recorder.stopMediaStream()
 			}
