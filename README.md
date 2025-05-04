@@ -41,6 +41,7 @@ Inspired by [superwhisper](https://superwhisper.com/), definitely check it out i
 - [ ] prevent sending empty messages (no audio)
 - [ ] cancel recording
 - [ ] add configs/presets/modes (need to decide on the name)
+  - [ ] create ui for it / edit it in settings
   - [ ] each config can have: formatting preset, ai model, language
   - [ ] choose one default config
   - [ ] assign shortcut to each config

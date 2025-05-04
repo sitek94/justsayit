@@ -171,7 +171,7 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div class="flex h-screen justify-center rounded-2xl border border-white text-gray-900">
+<div class="flex h-screen justify-center rounded-2xl border border-white">
 	<div class="h-full w-full pb-[20px]" data-tauri-drag-region>
 		{#if recorder.mediaStream && !isProcessing}
 			<Visualizer stream={recorder.mediaStream} />

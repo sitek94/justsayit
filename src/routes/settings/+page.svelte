@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {getCurrentWebviewWindow} from '@tauri-apps/api/webviewWindow'
 	import {settings, updateSettings, type Settings} from '$lib/core/settings'
 
 	let currentSettings: Settings = $settings ?? {
@@ -12,9 +13,22 @@
 	function handleSubmit() {
 		updateSettings(currentSettings)
 	}
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.metaKey && event.key === 'w') {
+			const webviewWindow = getCurrentWebviewWindow()
+			webviewWindow?.close()
+		}
+	}
 </script>
 
-<form on:submit|preventDefault={handleSubmit} class="max-w-md space-y-4">
+<svelte:window on:keydown={handleKeydown} />
+
+<form
+	on:submit|preventDefault={handleSubmit}
+	class="h-screen w-full space-y-4 rounded-2xl border border-white bg-gray-900 p-4 text-white"
+	data-tauri-drag-region
+>
 	<div>
 		<label for="groqApiKey" class="mb-2 block text-sm font-medium">
 			GROQ API Key

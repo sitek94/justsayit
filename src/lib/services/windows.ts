@@ -8,11 +8,24 @@ const WINDOW_LABELS = {
 export async function openSettingsWindow() {
 	const webview = new WebviewWindow(WINDOW_LABELS.SETTINGS, {
 		title: 'Settings',
-		decorations: true,
-		resizable: false,
+		decorations: false,
+		resizable: true,
+		transparent: true,
+		shadow: false,
 		width: 300,
+		minWidth: 300,
+		maxWidth: 600,
 		height: 400,
+		minHeight: 400,
+		maxHeight: 800,
+		focus: true,
+		alwaysOnTop: true,
+		closable: false,
 		url: '/settings',
+		windowEffects: {
+			effects: [],
+			radius: 16,
+		},
 	})
 
 	webview.once('tauri://created', () => {

@@ -25,15 +25,21 @@
 
 {#if isInitializing}
 	<div
-		class="flex h-screen items-center justify-center rounded-2xl border border-white text-gray-900"
+		class="flex h-screen cursor-default items-center justify-center rounded-2xl border border-white bg-gray-900 text-white"
+		data-tauri-drag-region
 	>
-		<p class="text-white">Initializing...</p>
+		Initializing...
 	</div>
 {:else if !hasRequiredSettings($settings)}
-	<div class="container mx-auto p-4">
-		<p class="mb-4">Please configure the required settings to continue.</p>
+	<div
+		class="container mx-auto rounded-2xl border border-white bg-gray-900 p-4 text-white select-none"
+		data-tauri-drag-region
+	>
+		<p class="mb-4 cursor-default" data-tauri-drag-region>
+			Please configure the required settings to continue.
+		</p>
 		<button
-			class="rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none"
+			class="cursor-pointer rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none"
 			onclick={openSettingsWindow}>Open Settings</button
 		>
 	</div>
