@@ -1,5 +1,5 @@
 import type {Language} from '$lib/core/types'
-import type {ModelName} from '$lib/services/ai'
+import type {ModelId} from '$lib/services/ai'
 import {getDefaultPrompt} from './prompts/default'
 import {getEmailPrompt} from './prompts/email'
 import {getMessagePrompt} from './prompts/message'
@@ -7,12 +7,14 @@ import {getNotePrompt} from './prompts/note'
 
 type Preset = {
 	name: string
-	model: ModelName
+	model: ModelId
 	shortcut?: string
 	getPrompt: (text: string) => string
 }
 
 export type PresetName = 'default' | 'message' | 'note' | 'email'
+
+export const presetNames: PresetName[] = ['default', 'message', 'note', 'email']
 
 export const getPreset = (name: PresetName, language: Language) => {
 	/**
@@ -23,22 +25,22 @@ export const getPreset = (name: PresetName, language: Language) => {
 	const PRESETS = {
 		default: {
 			name: 'Default',
-			model: 'gpt4oMini',
+			model: 'gpt-4.1-nano',
 			getPrompt: text => getDefaultPrompt(text, language),
 		},
 		message: {
 			name: 'Message',
-			model: 'claude35Sonnet',
+			model: 'gpt-4.1-mini',
 			getPrompt: text => getMessagePrompt(text, language),
 		},
 		note: {
 			name: 'Note',
-			model: 'claude35Sonnet',
+			model: 'gpt-4.1',
 			getPrompt: text => getNotePrompt(text, language),
 		},
 		email: {
 			name: 'Email',
-			model: 'gpt4oMini',
+			model: 'gpt-4.1-mini',
 			getPrompt: text => getEmailPrompt(text, language),
 		},
 	} satisfies Record<PresetName, Preset>

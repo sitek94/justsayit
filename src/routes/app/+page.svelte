@@ -4,10 +4,11 @@
 	import {aiModel, formatWithAi, language, preset} from '$lib/core/state'
 	import type {Language} from '$lib/core/types'
 	import {aiFormatting, type PresetName} from '$lib/features/ai-formatting'
-	import {getPreset} from '$lib/features/ai-formatting/presets'
+	import {getPreset, presetNames} from '$lib/features/ai-formatting/presets'
 	import {createRecorder} from '$lib/features/audio/recorder.svelte'
 	import Visualizer from '$lib/features/audio/visualizer.svelte'
 	import {initializeDeepLinks} from '$lib/features/deep-links'
+	import {supportedModels} from '$lib/services/ai/providers'
 	import {clipboard} from '$lib/services/clipboard'
 	import {fileSystemService} from '$lib/services/file-system'
 	import {keyboardMaestro} from '$lib/services/keyboard-maestro'
@@ -190,17 +191,15 @@
 		</button>
 
 		<select class="bg-white text-gray-900" bind:value={$preset}>
-			<option value="default">default</option>
-			<option value="message">message</option>
-			<option value="note">note</option>
-			<option value="email">email</option>
+			{#each presetNames as preset}
+				<option value={preset}>{preset}</option>
+			{/each}
 		</select>
 
 		<select class="bg-white text-gray-900" bind:value={$aiModel}>
-			<option value="gpt4o">gpt4o</option>
-			<option value="gpt4oMini">gpt4oMini</option>
-			<option value="claude35Sonnet">claude35Sonnet</option>
-			<option value="claude35Haiku">claude35Haiku</option>
+			{#each supportedModels as model}
+				<option value={model}>{model.replace('-latest', '')}</option>
+			{/each}
 		</select>
 
 		<select class="bg-white text-gray-900" bind:value={$language}>

@@ -5,53 +5,64 @@ import type {OpenAIChatModelId} from '@ai-sdk/openai/internal'
 import type {LanguageModelV1} from 'ai'
 import {requireApiKey} from '$lib/core/settings'
 
-const modelNameToModelId = {
-	gpt4o: 'gpt-4o' as const,
-	gpt4oMini: 'gpt-4o-mini' as const,
-	claude35Sonnet: 'claude-3-5-sonnet-20240620' as const,
-	claude35Haiku: 'claude-3-5-haiku-20240307' as const,
-} satisfies Record<string, OpenAIChatModelId | AnthropicMessagesModelId>
-
-export type ModelName = keyof typeof modelNameToModelId
-
-const getModelId = (modelName: ModelName) => {
-	const modelId = modelNameToModelId[modelName]
-	if (!modelId) throw new Error(`Unsupported model: ${modelName}`)
-	return modelId
+const supportedOpenAiModels = [
+	'gpt-4.1',
+	'gpt-4.1-mini',
+	'gpt-4.1-nano',
+] satisfies OpenAIChatModelId[]
+type OpenAiModel = (typeof supportedOpenAiModels)[number]
+const isOpenAiModel = (model: string): model is OpenAiModel => {
+	return supportedOpenAiModels.includes(model as OpenAiModel)
 }
 
+const supportedAnthropicModels = [
+	'claude-3-5-haiku-latest',
+	'claude-3-5-sonnet-latest',
+] satisfies AnthropicMessagesModelId[]
+type AnthropicModel = (typeof supportedAnthropicModels)[number]
+const isAnthropicModel = (model: string): model is AnthropicModel => {
+	return supportedAnthropicModels.includes(model as AnthropicModel)
+}
+
+export const supportedModels = [...supportedOpenAiModels, ...supportedAnthropicModels]
+
+export type ModelId = (typeof supportedModels)[number]
+
 type ModelProvider = {
-	getModel: (model: ModelName) => LanguageModelV1
+	getModel: (model: ModelId) => LanguageModelV1
 }
 
 const openaiProvider: ModelProvider = {
-	getModel: (model: ModelName) => {
+	getModel: (model: ModelId) => {
+		if (!isOpenAiModel(model)) {
+			throw new Error(`Unsupported OpenAI model: ${model}`)
+		}
 		const openai = createOpenAI({
 			apiKey: requireApiKey('openai'),
 		})
-		return openai(getModelId(model))
+		return openai(model)
 	},
 }
 
 const anthropicProvider: ModelProvider = {
-	getModel: (model: ModelName) => {
+	getModel: (model: ModelId) => {
+		if (!isAnthropicModel(model)) {
+			throw new Error(`Unsupported Anthropic model: ${model}`)
+		}
 		const anthropic = createAnthropic({
 			apiKey: requireApiKey('anthropic'),
 			headers: {'anthropic-dangerous-direct-browser-access': 'true'},
 		})
-		return anthropic(getModelId(model))
+		return anthropic(model)
 	},
 }
 
-const modelNameToProvider = {
-	gpt4o: openaiProvider,
-	gpt4oMini: openaiProvider,
-	claude35Sonnet: anthropicProvider,
-	claude35Haiku: anthropicProvider,
-} satisfies Record<string, ModelProvider>
-
-export const getModelProvider = (model: ModelName) => {
-	const provider = modelNameToProvider[model]
-	if (!provider) throw new Error(`Unsupported model: ${model}`)
-	return provider
+export const getModelProvider = (model: ModelId) => {
+	if (isOpenAiModel(model)) {
+		return openaiProvider
+	}
+	if (isAnthropicModel(model)) {
+		return anthropicProvider
+	}
+	throw new Error(`Unsupported model: ${model}`)
 }
