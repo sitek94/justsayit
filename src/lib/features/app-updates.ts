@@ -8,7 +8,8 @@ export async function checkForUpdates() {
 		const version = await getVersion()
 		const update = await check()
 
-		if (update) {
+		// Sometimes the update object exists but has no data, so double-check before using it
+		if (update && update.version) {
 			const hasAgreed = await ask(
 				`A new version v${update.version} is available (You're on v${version}). Would you like to update?`,
 				{
