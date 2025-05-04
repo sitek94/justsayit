@@ -1,5 +1,15 @@
 # justsayit
 
+## 0.1.13
+
+### Patch Changes
+
+- fix always formatting with ai ([`97d7e10`](https://github.com/sitek94/justsayit/commit/97d7e109d45011677ce2b9f7cbcd5ea16b06265a))
+
+- add system tray action to open recordings directory ([`7cc3235`](https://github.com/sitek94/justsayit/commit/7cc3235630786c7e713b97c96addde8018f523c2))
+
+- use latest openai models ([`8275714`](https://github.com/sitek94/justsayit/commit/8275714273a458030dde54c6e067b5448571c64f))
+
 ## 0.1.12
 
 ### Patch Changes
