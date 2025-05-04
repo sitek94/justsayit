@@ -46,6 +46,7 @@ Inspired by [superwhisper](https://superwhisper.com/), definitely check it out i
   - [ ] choose one default config
   - [ ] assign shortcut to each config
 - [ ] support local models
+- [ ] replace default icon
 
 ### v0.3
 
