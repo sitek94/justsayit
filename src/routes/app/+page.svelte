@@ -64,7 +64,7 @@
 	}
 
 	async function formatTranscript(transcript: string) {
-		if (formatWithAi) {
+		if ($formatWithAi) {
 			return await aiFormatting.format({text: transcript, presetName: $preset, language: $language})
 		}
 

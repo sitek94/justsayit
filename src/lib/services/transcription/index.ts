@@ -4,7 +4,7 @@ import {getTranscriptionProvider} from './providers'
 export const transcription = {
 	transcribe: async (audioBuffer: ArrayBuffer, language: Language) => {
 		const provider = getTranscriptionProvider()
-
-		return await provider.transcribe(audioBuffer, language)
+		const result = await provider.transcribe(audioBuffer, language)
+		return result.trim()
 	},
 }
