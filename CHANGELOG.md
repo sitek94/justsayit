@@ -1,5 +1,11 @@
 # justsayit
 
+## 0.1.15
+
+### Patch Changes
+
+- bump all tauri packages ([`d633974`](https://github.com/sitek94/justsayit/commit/d633974d2aa125dc90897b37fc9fe2b3fe80760c))
+
 ## 0.1.14
 
 ### Patch Changes
