@@ -57,7 +57,7 @@ The application follows a modular architecture with a clear separation between f
 - **Features**: Contain business logic and UI components for specific application features
 - **Services**: Handle API interactions (Tauri, OpenAI, Grok, etc.) and provide a clean interface for features
 
-```plaintext
+```sh
 src/
 ├── app.html
 ├── app.d.ts

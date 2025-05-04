@@ -1,4 +1,4 @@
-import * as path from '@tauri-apps/api/path'
+import {documentDir, join} from '@tauri-apps/api/path'
 import {BaseDirectory, exists, mkdir, writeFile, writeTextFile} from '@tauri-apps/plugin-fs'
 
 /**
@@ -9,58 +9,61 @@ import {BaseDirectory, exists, mkdir, writeFile, writeTextFile} from '@tauri-app
  *                         - raw.txt
  */
 
-const BASE_DIR = BaseDirectory.Document
-const APP_DIR = 'justsayit'
-const RECORDINGS_DIR = 'recordings'
-
 type RecordingResult = {
 	audio: Blob
 	transcript: string
 	raw: string
 }
 
-export const fileSystem = {
-	ensureAppDirectoriesExist: async () => {
-		const appDirPath = await path.join(APP_DIR)
-		const recordingsDirPath = await path.join(APP_DIR, RECORDINGS_DIR)
+class FileSystemService {
+	private readonly baseDir = BaseDirectory.Document
 
-		if (!(await exists(appDirPath, {baseDir: BASE_DIR}))) {
-			await mkdir(appDirPath, {baseDir: BASE_DIR, recursive: true})
+	async getAppPath() {
+		return await join(await documentDir(), 'justsayit')
+	}
+
+	async getRecordingsPath() {
+		return await join(await this.getAppPath(), 'recordings')
+	}
+
+	async ensureAppDirectoriesExist() {
+		const {baseDir} = this
+		const appPath = await this.getAppPath()
+		const recordingsPath = await this.getRecordingsPath()
+
+		if (!(await exists(appPath, {baseDir}))) {
+			await mkdir(appPath, {baseDir, recursive: true})
 		}
 
-		if (!(await exists(recordingsDirPath, {baseDir: BASE_DIR}))) {
-			await mkdir(recordingsDirPath, {baseDir: BASE_DIR, recursive: true})
+		if (!(await exists(recordingsPath, {baseDir}))) {
+			await mkdir(recordingsPath, {baseDir, recursive: true})
 		}
+	}
 
-		return appDirPath
-	},
-
-	saveRecording: async (recording: RecordingResult) => {
-		await fileSystem.ensureAppDirectoriesExist()
+	async saveRecording(recording: RecordingResult) {
+		const {baseDir} = this
+		await this.ensureAppDirectoriesExist()
 
 		const timestamp = Date.now().toString()
-		const recordingDirPath = await path.join(APP_DIR, RECORDINGS_DIR, timestamp)
+		const recordingPath = await join(await this.getRecordingsPath(), timestamp)
 
-		await mkdir(recordingDirPath, {baseDir: BASE_DIR, recursive: true})
+		await mkdir(recordingPath, {baseDir, recursive: true})
 
-		const audioData = await blobToUint8Array(recording.audio)
-		const audioPath = await path.join(recordingDirPath, 'recording.mp3')
-		await writeFile(audioPath, audioData, {baseDir: BASE_DIR})
+		const audioData = await this.blobToUint8Array(recording.audio)
+		const audioPath = await join(recordingPath, 'recording.mp3')
+		await writeFile(audioPath, audioData, {baseDir})
 
-		const transcriptPath = await path.join(recordingDirPath, 'transcript.txt')
-		await writeTextFile(transcriptPath, recording.transcript, {baseDir: BASE_DIR})
+		const transcriptPath = await join(recordingPath, 'transcript.txt')
+		await writeTextFile(transcriptPath, recording.transcript, {baseDir})
 
-		const rawPath = await path.join(recordingDirPath, 'raw.txt')
-		await writeTextFile(rawPath, recording.raw, {baseDir: BASE_DIR})
+		const rawPath = await join(recordingPath, 'raw.txt')
+		await writeTextFile(rawPath, recording.raw, {baseDir})
+	}
 
-		return recordingDirPath
-	},
+	private async blobToUint8Array(blob: Blob): Promise<Uint8Array> {
+		const arrayBuffer = await blob.arrayBuffer()
+		return new Uint8Array(arrayBuffer)
+	}
 }
 
-/**
- * Convert a Blob to Uint8Array for file system operations
- */
-async function blobToUint8Array(blob: Blob): Promise<Uint8Array> {
-	const arrayBuffer = await blob.arrayBuffer()
-	return new Uint8Array(arrayBuffer)
-}
+export const fileSystemService = new FileSystemService()

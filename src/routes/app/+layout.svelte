@@ -3,7 +3,7 @@
 	import {hasRequiredSettings, initializeSettings, settings} from '$lib/core/settings'
 	import {checkForUpdates} from '$lib/features/app-updates'
 	import {destroyTray, initializeTray} from '$lib/features/system-tray'
-	import {fileSystem} from '$lib/services/file-system'
+	import {fileSystemService} from '$lib/services/file-system'
 	import {openSettingsWindow} from '$lib/services/windows'
 
 	let {children}: {children: Snippet} = $props()
@@ -13,7 +13,7 @@
 		if (import.meta.env.PROD) await checkForUpdates()
 		await initializeSettings()
 		await initializeTray()
-		await fileSystem.ensureAppDirectoriesExist()
+		await fileSystemService.ensureAppDirectoriesExist()
 
 		isInitializing = false
 	})

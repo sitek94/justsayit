@@ -9,7 +9,7 @@
 	import Visualizer from '$lib/features/audio/visualizer.svelte'
 	import {initializeDeepLinks} from '$lib/features/deep-links'
 	import {clipboard} from '$lib/services/clipboard'
-	import {fileSystem} from '$lib/services/file-system'
+	import {fileSystemService} from '$lib/services/file-system'
 	import {keyboardMaestro} from '$lib/services/keyboard-maestro'
 	import {playStartSound, playStopSound} from '$lib/services/play-sound'
 	import {transcription} from '$lib/services/transcription'
@@ -51,7 +51,11 @@
 			// Some room for performance improvements here
 			await clipboard.copy(formattedTranscript)
 			await keyboardMaestro.pasteTextFromClipboard()
-			await fileSystem.saveRecording({audio, transcript: formattedTranscript, raw: transcript})
+			await fileSystemService.saveRecording({
+				audio,
+				transcript: formattedTranscript,
+				raw: transcript,
+			})
 		} catch (error) {
 			console.error(error)
 		} finally {
@@ -63,6 +67,8 @@
 		if (formatWithAi) {
 			return await aiFormatting.format({text: transcript, presetName: $preset, language: $language})
 		}
+
+		console.debug({ai: false, language: $language, text: transcript})
 
 		return transcript
 	}

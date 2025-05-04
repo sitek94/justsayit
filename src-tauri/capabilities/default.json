@@ -56,6 +56,14 @@
       ]
     },
     "opener:default",
+    {
+      "identifier": "opener:allow-open-path",
+      "allow": [
+        {
+          "path": "$DOCUMENT/justsayit/*"
+        }
+      ]
+    },
     "process:default",
     "store:allow-load",
     "store:allow-save",

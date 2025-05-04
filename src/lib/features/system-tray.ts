@@ -1,8 +1,11 @@
 import {defaultWindowIcon} from '@tauri-apps/api/app'
 import {Menu} from '@tauri-apps/api/menu'
+import * as path from '@tauri-apps/api/path'
 import {TrayIcon} from '@tauri-apps/api/tray'
+import {openPath} from '@tauri-apps/plugin-opener'
 import {exit} from '@tauri-apps/plugin-process'
 import {get, writable} from 'svelte/store'
+import {fileSystemService} from '$lib/services/file-system'
 import {bringMainWindowToFront, openSettingsWindow} from '$lib/services/windows'
 
 const trayId = writable<string | null>(null)
@@ -15,6 +18,14 @@ export async function initializeTray() {
 				text: 'Open justsayit',
 				action: async () => {
 					await bringMainWindowToFront()
+				},
+			},
+			{
+				id: 'open-recordings',
+				text: 'Open recordings',
+				action: async () => {
+					const fullPath = await path.resolve(await fileSystemService.getRecordingsPath())
+					await openPath(fullPath)
 				},
 			},
 			{
