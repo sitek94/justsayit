@@ -1,5 +1,13 @@
 # justsayit
 
+## 0.1.16
+
+### Patch Changes
+
+- fix: ensure update object has version data before prompting user ([`2a0210d`](https://github.com/sitek94/justsayit/commit/2a0210da526d4883a421fa619648712aa1d8710b))
+
+- fix: add unregisterAll to prevent errors when trying to register global shortcuts ([`1231f2b`](https://github.com/sitek94/justsayit/commit/1231f2b4509b82049183aa1e2f79e599e84960c3))
+
 ## 0.1.15
 
 ### Patch Changes
