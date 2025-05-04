@@ -34,7 +34,7 @@ Inspired by [superwhisper](https://superwhisper.com/), definitely check it out i
 
 - [ ] deep link support
 - [ ] retry mechanism
-- [ ] tray menu action to open history file dir
+- [x] tray menu action to open history file dir
 - [x] paste text after processing
   - [ ] add config to disable pasting
 - [ ] maybe this ai toggle is not needed now, one of the presets could be "no formatting"
