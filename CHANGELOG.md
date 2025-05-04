@@ -1,5 +1,11 @@
 # justsayit
 
+## 0.1.14
+
+### Patch Changes
+
+- improve settings styles ([`6b0e646`](https://github.com/sitek94/justsayit/commit/6b0e646b054442923fc5acfd3844197c81c343f4))
+
 ## 0.1.13
 
 ### Patch Changes
