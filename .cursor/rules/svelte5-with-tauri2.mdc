@@ -1,6 +1,6 @@
 ---
 description: Svelte 5 with Tauri v2
-globs: '**/*.svelte '
+globs: **/*.svelte
 alwaysApply: false
 ---
 
