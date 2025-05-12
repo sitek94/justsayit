@@ -1,5 +1,13 @@
 # justsayit
 
+## 0.1.17
+
+### Patch Changes
+
+- fix tray actions by reverting tauri packages ([`936c5f6`](https://github.com/sitek94/justsayit/commit/936c5f6bb29dd86a059b9208ebce12ddf5edbfda))
+
+  I can't pinpoint right now, which specific update caused it, so I'm reverting all the packages that I recently bumped and pint them to the specific, working version.
+
 ## 0.1.16
 
 ### Patch Changes
