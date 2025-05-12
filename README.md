@@ -32,6 +32,7 @@ Inspired by [superwhisper](https://superwhisper.com/), definitely check it out i
 
 ### v0.2
 
+- [ ] add vocabulary list user setting
 - [ ] deep link support
 - [ ] retry mechanism
 - [x] tray menu action to open history file dir
